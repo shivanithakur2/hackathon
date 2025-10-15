@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InsightBites - Bangkok Kitchen Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+            background: #f8fafb;
+            color: #2d3748;
+            line-height: 1.6;
+        }
+
+        .dashboard {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Top Bar */
+        .top-bar {
+            background: white;
+            border-radius: 16px;
+            padding: 20px 32px;
+            margin-bottom: 24px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 32px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 24px;
+            font-weight: 700;
+            color: #00a896;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #00a896 0%, #02c39a 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+        }
+
+        .restaurant-info {
+            flex: 1;
+            text-align: center;
+        }
+
+        .restaurant-name {
+            font-size: 20px;
+            font-weight: 600;
+            color: #1a202c;
+            margin-bottom: 12px;
+        }
+
+        .kpis {
+            display: flex;
+            gap: 32px;
+            justify-content: center;
+        }
+
+        .kpi {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .kpi-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            color: #718096;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+
+        .kpi-value {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1a202c;
+        }
+
+        .kpi-trend {
+            font-size: 12px;
+            color: #00a896;
+            font-weight: 500;
+        }
+
+        .filters {
+            display: flex;
+            gap: 12px;
+        }
+
+        .filter-select {
+            padding: 10px 16px;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            background: white;
+            font-size: 14px;
+            color: #2d3748;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .filter-select:hover {
+            border-color: #00a896;
+        }
+
+        /* Main Content Grid */
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+
+        /* Card Styles */
+        .section {
+            background: white;
+            border-radius: 16px;
+            padding: 28px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+        }
+
+        .section-header {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1a202c;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #00a896 0%, #02c39a 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 16px;
+        }
+
+        /* Chart Container */
+        .chart-container {
+            background: #f8fafb;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            height: 280px;
+            position: relative;
+        }
+
+        .chart-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #4a5568;
+            margin-bottom: 16px;
+        }
+
+        /* Insight Cards */
+        .insight-cards {
+            display: grid;
+            gap: 16px;
+            margin-top: 20px;
+        }
+
+        .insight-card {
+            background: linear-gradient(135deg, #f0fdfa 0%, #e0f2fe 100%);
+            border-left: 4px solid #00a896;
+            border-radius: 12px;
+            padding: 18px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .insight-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 168, 150, 0.15);
+        }
+
+        .insight-card.highlight {
+            background: linear-gradient(135deg, #fef3c7 0%, #fed7aa 100%);
+            border-left-color: #f59e0b;
+        }
+
+        .insight-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #1a202c;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .insight-description {
+            font-size: 14px;
+            color: #4a5568;
+            margin-bottom: 12px;
+            line-height: 1.5;
+        }
+
+        .insight-action {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: white;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #00a896;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .insight-action:hover {
+            background: #00a896;
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .metric-badge {
+            display: inline-block;
+            background: white;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 700;
+            color: #00a896;
+        }
+
+        /* Pricing Table */
+        .pricing-table {
+            background: #f8fafb;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .pricing-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 2fr;
+            gap: 16px;
+            padding: 16px;
+            background: white;
+            border-radius: 10px;
+            margin-bottom: 12px;
+            align-items: center;
+            transition: all 0.2s;
+        }
+
+        .pricing-row:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transform: translateX(4px);
+        }
+
+        .pricing-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .dish-name {
+            font-size: 15px;
+            font-weight: 600;
+            color: #1a202c;
+        }
+
+        .price-current {
+            font-size: 18px;
+            font-weight: 700;
+            color: #2d3748;
+        }
+
+        .price-market {
+            font-size: 14px;
+            color: #718096;
+        }
+
+        .price-suggestion {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            background: linear-gradient(135deg, #dcfce7 0%, #d1fae5 100%);
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #059669;
+        }
+
+        .price-suggestion.increase {
+            background: linear-gradient(135deg, #dcfce7 0%, #d1fae5 100%);
+            color: #059669;
+        }
+
+        .price-suggestion.decrease {
+            background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+            color: #dc2626;
+        }
+
+        .confidence {
+            font-size: 11px;
+            color: #6b7280;
+            margin-top: 2px;
+        }
+
+        /* Map Visualization */
+        .map-container {
+            background: linear-gradient(135deg, #e0f2fe 0%, #dbeafe 100%);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .map-placeholder {
+            text-align: center;
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        .heat-zones {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .heat-zone {
+            position: absolute;
+            border-radius: 50%;
+            animation: pulse 3s ease-in-out infinite;
+        }
+
+        .heat-zone.hot {
+            width: 120px;
+            height: 120px;
+            background: radial-gradient(circle, rgba(239, 68, 68, 0.4) 0%, rgba(239, 68, 68, 0) 70%);
+            top: 30%;
+            left: 40%;
+        }
+
+        .heat-zone.warm {
+            width: 100px;
+            height: 100px;
+            background: radial-gradient(circle, rgba(251, 146, 60, 0.3) 0%, rgba(251, 146, 60, 0) 70%);
+            top: 50%;
+            left: 60%;
+            animation-delay: 1s;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.1); opacity: 1; }
+        }
+
+        /* Bundle Card */
+        .bundle-card {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 16px;
+            border: 2px dashed #f59e0b;
+        }
+
+        .bundle-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #92400e;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .bundle-items {
+            font-size: 14px;
+            color: #78350f;
+            margin-bottom: 12px;
+            font-weight: 500;
+        }
+
+        /* Footer */
+        .footer {
+            background: white;
+            border-radius: 16px;
+            padding: 24px 32px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .privacy-notice {
+            font-size: 12px;
+            color: #718096;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .privacy-icon {
+            width: 20px;
+            height: 20px;
+            background: #e2e8f0;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
+
+        .action-log {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .action-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 14px;
+            background: #f0fdfa;
+            border-radius: 8px;
+            font-size: 13px;
+            color: #0f766e;
+            font-weight: 500;
+        }
+
+        .action-icon {
+            width: 20px;
+            height: 20px;
+            background: #00a896;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+        }
+
+        /* Dynamic Pricing Rule Card */
+        .rule-card {
+            background: linear-gradient(135deg, #ede9fe 0%, #ddd6fe 100%);
+            border-radius: 12px;
+            padding: 18px;
+            margin-top: 16px;
+            border-left: 4px solid #8b5cf6;
+        }
+
+        .rule-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #5b21b6;
+            margin-bottom: 8px;
+        }
+
+        .rule-description {
+            font-size: 14px;
+            color: #6b21a8;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .top-bar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .kpis {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .pricing-row {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <!-- Top Bar -->
+        <div class="top-bar">
+            <div class="logo">
+                <div class="logo-icon">🍜</div>
+                InsightBites
+            </div>
+            
+            <div class="restaurant-info">
+                <div class="restaurant-name">Bangkok Kitchen — Westside</div>
+                <div class="kpis">
+                    <div class="kpi">
+                        <div class="kpi-label">Weekly Orders</div>
+                        <div class="kpi-value">
+                            287
+                            <span class="kpi-trend">↑ 12%</span>
+                        </div>
+                    </div>
+                    <div class="kpi">
+                        <div class="kpi-label">Avg Rating</div>
+                        <div class="kpi-value">
+                            4.7
+                            <span class="kpi-trend">↑ 0.2</span>
+                        </div>
+                    </div>
+                    <div class="kpi">
+                        <div class="kpi-label">AOV</div>
+                        <div class="kpi-value">
+                            $24.80
+                            <span class="kpi-trend">↑ 8%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="filters">
+                <select class="filter-select">
+                    <option>Last 7 days</option>
+                    <option>Last 30 days</option>
+                    <option>Last 90 days</option>
+                </select>
+                <select class="filter-select">
+                    <option>3 miles radius</option>
+                    <option>5 miles radius</option>
+                    <option>10 miles radius</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Left Section: Local Trends -->
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-icon">📊</div>
+                    Local Demand Snapshot
+                </div>
+
+                <!-- Line Chart -->
+                <div class="chart-container">
+                    <div class="chart-title">Trending Dishes in Your Area (Last 30 Days)</div>
+                    <canvas id="demandChart"></canvas>
+                </div>
+
+                <!-- Map Heat Visualization -->
+                <div class="map-container">
+                    <div class="heat-zones">
+                        <div class="heat-zone hot"></div>
+                        <div class="heat-zone warm"></div>
+                    </div>
+                    <div class="map-placeholder">
+                        <div style="font-weight: 600; font-size: 16px; margin-bottom: 8px;">Thai Food Demand Hot Zones</div>
+                        <div>Higher demand in downtown & university district areas</div>
+                    </div>
+                </div>
+
+                <!-- Insight Cards -->
+                <div class="insight-cards">
+                    <div class="insight-card">
+                        <div class="insight-title">
+                            <span>📈</span>
+                            Pad See Ew Opportunity
+                        </div>
+                        <div class="insight-description">
+                            Demand increased <span class="metric-badge">+35%</span> in your area. 
+                            Add to your menu for estimated 8–12% revenue lift.
+                        </div>
+                        <button class="insight-action">
+                            <span>+</span> Add to Menu
+                        </button>
+                    </div>
+
+                    <div class="insight-card">
+                        <div class="insight-title">
+                            <span>☕</span>
+                            Thai Iced Coffee Gap
+                        </div>
+                        <div class="insight-description">
+                            Only 2 of 12 Thai restaurants nearby offer this. 
+                            Capture emerging trend with low competition.
+                        </div>
+                        <button class="insight-action">
+                            <span>+</span> Add Beverage
+                        </button>
+                    </div>
+
+                    <div class="insight-card highlight">
+                        <div class="insight-title">
+                            <span>💸</span>
+                            Midweek Curry Hour
+                        </div>
+                        <div class="insight-description">
+                            Launch 15% off promotion on Wednesdays 3–6 PM. 
+                            Expected to boost midweek orders by 25%.
+                        </div>
+                        <button class="insight-action">
+                            <span>🚀</span> Create Promo
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Bundle Card -->
+                <div class="bundle-card">
+                    <div class="bundle-title">
+                        <span>🎁</span>
+                        Suggested Bundle
+                    </div>
+                    <div class="bundle-items">
+                        Pad Thai + Spring Rolls + Thai Tea
+                    </div>
+                    <div class="insight-description" style="color: #78350f; margin: 0 0 12px 0;">
+                        Customers who order Pad Thai also buy these 72% of the time. 
+                        Bundle could increase AOV by <span class="metric-badge" style="background: #fde68a; color: #92400e;">+$10</span>
+                    </div>
+                    <button class="insight-action" style="background: #fef3c7; color: #92400e;">
+                        <span>📦</span> Create Bundle
+                    </button>
+                </div>
+            </div>
+
+            <!-- Right Section: Pricing & Margin -->
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-icon">💰</div>
+                    Pricing & Margin Health
+                </div>
+
+                <!-- Pricing Table -->
+                <div class="pricing-table">
+                    <div class="pricing-row">
+                        <div class="dish-name">Pad Thai</div>
+                        <div>
+                            <div class="price-current">$11.20</div>
+                            <div class="price-market">You</div>
+                        </div>
+                        <div>
+                            <div class="price-current" style="font-size: 16px; color: #718096;">$9.10</div>
+                            <div class="price-market">Market Avg</div>
+                        </div>
+                        <div class="price-suggestion decrease">
+                            <span>↓</span> Test -$1.00
+                            <div class="confidence">85% confidence</div>
+                        </div>
+                    </div>
+
+                    <div class="pricing-row">
+                        <div class="dish-name">Green Curry</div>
+                        <div>
+                            <div class="price-current">$10.50</div>
+                            <div class="price-market">You</div>
+                        </div>
+                        <div>
+                            <div class="price-current" style="font-size: 16px; color: #718096;">$11.70</div>
+                            <div class="price-market">Market Avg</div>
+                        </div>
+                        <div class="price-suggestion increase">
+                            <span>↑</span> Test +$1.20
+                            <div class="confidence">92% confidence</div>
+                        </div>
+                    </div>
+
+                    <div class="pricing-row">
+                        <div class="dish-name">Mango Sticky Rice</div>
+                        <div>
+                            <div class="price-current">$7.50</div>
+                            <div class="price-market">You</div>
+                        </div>
+                        <div>
+                            <div class="price-current" style="font-size: 16px; color: #718096;">$7.30</div>
+                            <div class="price-market">Market Avg</div>
+                        </div>
+                        <div class="price-suggestion" style="background: #e2e8f0; color: #64748b;">
+                            <span>✓</span> Well priced
+                            <div class="confidence">Keep current</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Donut Chart -->
+                <div class="chart-container" style="height: 260px;">
+                    <div class="chart-title">Margin Breakdown</div>
+                    <canvas id="marginChart"></canvas>
+                </div>
+
+                <!-- Bar Chart -->
+                <div class="chart-container" style="height: 220px;">
+                    <div class="chart-title">Competitive Promo Activity (3-mile radius)</div>
+                    <canvas id="promoChart"></canvas>
+                </div>
+
+                <!-- Dynamic Pricing Rule -->
+                <div class="rule-card">
+                    <div class="rule-title">⚡ Dynamic Pricing Insight</div>
+                    <div class="rule-description">
+                        Rainy weekends see +20% soup orders. 
+                        Consider +$0.50 adjustment on Tom Yum & Pho during weather events.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <div class="privacy-notice">
+                <div class="privacy-icon">🔒</div>
+                All insights are aggregated and anonymized (N ≥ 5 merchants)
+            </div>
+            
+            <div class="action-log">
+                <span style="font-size: 13px; color: #718096; font-weight: 500;">Recent Actions:</span>
+                <div class="action-item">
+                    <div class="action-icon">✓</div>
+                    Added Mango Sticky Rice
+                </div>
+                <div class="action-item">
+                    <div class="action-icon">✓</div>
+                    Created Weekend Promo
+                </div>
+                <div class="action-item">
+                    <div class="action-icon">✓</div>
+                    Price Test Running
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Demand Trend Chart
+        const demandCtx = document.getElementById('demandChart').getContext('2d');
+        new Chart(demandCtx, {
+            type: 'line',
+            data: {
+                labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+                datasets: [
+                    {
+                        label: 'Pad See Ew',
+                        data: [100, 115, 125, 135],
+                        borderColor: '#00a896',
+                        backgroundColor: 'rgba(0, 168, 150, 0.1)',
+                        tension: 0.4,
+                        fill: true,
+                        borderWidth: 3,
+                        pointRadius: 5,
+                        pointBackgroundColor: '#00a896'
+                    },
+                    {
+                        label: 'Mango Sticky Rice',
+                        data: [100, 118, 130, 140],
+                        borderColor: '#f59e0b',
+                        backgroundColor: 'rgba(245, 158, 11, 0.1)',
+                        tension: 0.4,
+                        fill: true,
+                        borderWidth: 3,
+                        pointRadius: 5,
+                        pointBackgroundColor: '#f59e0b'
+                    },
+                    {
+                        label: 'Thai Iced Coffee',
+                        data: [100, 108, 120, 125],
+                        borderColor: '#8b5cf6',
+                        backgroundColor: 'rgba(139, 92, 246, 0.1)',
+                        tension: 0.4,
+                        fill: true,
+                        borderWidth: 3,
+                        pointRadius: 5,
+                        pointBackgroundColor: '#8b5cf6'
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            usePointStyle: true,
+                            padding: 15,
+                            font: {
+                                size: 12,
+                                weight: '600'
+                            }
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                        padding: 12,
+                        titleFont: { size: 13, weight: '600' },
+                        bodyFont: { size: 12 },
+                        cornerRadius: 8
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function(value) {
+                                return value + '%';
+                            }
+                        },
+                        grid: {
+                            color: 'rgba(0, 0, 0, 0.05)'
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        }
+                    }
+                }
+            }
+        });
+
+        // Margin Donut Chart
+        const marginCtx = document.getElementById('marginChart').getContext('2d');
+        new Chart(marginCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Profit Margin', 'Cost of Goods', 'Promo Impact', 'Operating Expenses'],
+                datasets: [{
+                    data: [28, 35, 12, 25],
+                    backgroundColor: [
+                        '#00a896',
+                        '#64748b',
+                        '#f59e0b',
+                        '#cbd5e1'
+                    ],
+                    borderWidth: 0,
+                    borderRadius: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'right',
+                        labels: {
+                            usePointStyle: true,
+                            padding: 15,
+                            font: {
+                                size: 12,
+                                weight: '600'
+                            },
+                            generateLabels: function(chart) {
+                                const data = chart.data;
+                                return data.labels.map((label, i) => ({
+                                    text: `${label}: ${data.datasets[0].data[i]}%`,
+                                    fillStyle: data.datasets[0].backgroundColor[i],
+                                    hidden: false,
+                                    index: i
+                                }));
+                            }
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                        padding: 12,
+                        titleFont: { size: 13, weight: '600' },
+                        bodyFont: { size: 12 },
+                        cornerRadius: 8,
+                        callbacks: {
+                            label: function(context) {
+                                return context.label + ': ' + context.parsed + '%';
+                            }
+                        }
+                    }
+                },
+                cutout: '65%'
+            }
+        });
+
+        // Promo Activity Bar Chart
+        const promoCtx = document.getElementById('promoChart').getContext('2d');
+        new Chart(promoCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Thai', 'Vietnamese', 'Chinese', 'Japanese', 'Korean'],
+                datasets: [{
+                    label: '% Running Promos',
+                    data: [40, 25, 35, 20, 30],
+                    backgroundColor: [
+                        '#00a896',
+                        '#02c39a',
+                        '#05a6a0',
+                        '#089b95',
+                        '#0b8f8a'
+                    ],
+                    borderRadius: 6,
+                    borderSkipped: false
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                        padding: 12,
+                        titleFont: { size: 13, weight: '600' },
+                        bodyFont: { size: 12 },
+                        cornerRadius: 8,
+                        callbacks: {
+                            label: function(context) {
+                                return context.parsed.y + '% of restaurants';
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 50,
+                        ticks: {
+                            callback: function(value) {
+                                return value + '%';
+                            }
+                        },
+                        grid: {
+                            color: 'rgba(0, 0, 0, 0.05)'
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        }
+                    }
+                }
+            }
+        });
+
+        // Add hover effects and interactions
+        document.querySelectorAll('.insight-action').forEach(button => {
+            button.addEventListener('click', function() {
+                this.innerHTML = '<span>✓</span> Added';
+                this.style.background = '#00a896';
+                this.style.color = 'white';
+                setTimeout(() => {
+                    this.style.transform = 'scale(1)';
+                }, 200);
+            });
+        });
+    </script>
+</body>
+</html>

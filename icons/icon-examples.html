@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prism Icons - Examples</title>
+    <style>
+        body {
+            font-family: 'TT Norms', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            padding: 40px;
+            background: #F7F7F7;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+        }
+        
+        h1 {
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+        
+        .subtitle {
+            color: #606060;
+            margin-bottom: 40px;
+        }
+        
+        .icon-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+        
+        .icon-card {
+            padding: 24px;
+            border: 1px solid #E7E7E7;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.2s;
+        }
+        
+        .icon-card:hover {
+            border-color: #EB1700;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .icon-wrapper {
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #F7F7F7;
+            border-radius: 8px;
+        }
+        
+        .icon-wrapper img {
+            width: 24px;
+            height: 24px;
+        }
+        
+        .icon-name {
+            font-weight: 500;
+            font-size: 14px;
+            color: #191919;
+        }
+        
+        .code-section {
+            background: #F7F7F7;
+            padding: 24px;
+            border-radius: 8px;
+            margin-top: 40px;
+        }
+        
+        .code-section h2 {
+            font-size: 20px;
+            margin-bottom: 16px;
+        }
+        
+        pre {
+            background: #191919;
+            color: #FFFFFF;
+            padding: 16px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        
+        .usage-example {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px;
+            background: white;
+            border-radius: 8px;
+            margin: 12px 0;
+        }
+        
+        .example-icon {
+            width: 24px;
+            height: 24px;
+        }
+        
+        .color-demo {
+            display: flex;
+            gap: 16px;
+            margin: 16px 0;
+        }
+        
+        .color-demo div {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .icon-red {
+            filter: invert(21%) sepia(98%) saturate(6088%) hue-rotate(0deg) brightness(96%) contrast(112%);
+        }
+        
+        .icon-green {
+            filter: invert(39%) sepia(97%) saturate(466%) hue-rotate(92deg) brightness(92%) contrast(101%);
+        }
+        
+        .icon-gray {
+            filter: brightness(0) saturate(100%) invert(47%) sepia(0%) saturate(0%) hue-rotate(195deg) brightness(92%) contrast(85%);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Prism Icons</h1>
+        <p class="subtitle">Downloaded icons from your DoorDash Prism Design System</p>
+        
+        <h2>Available Icons</h2>
+        <div class="icon-grid">
+            <div class="icon-card">
+                <div class="icon-wrapper">
+                    <img src="chevron-down-16.svg" alt="Chevron Down">
+                </div>
+                <div class="icon-name">chevron-down-16</div>
+            </div>
+            
+            <div class="icon-card">
+                <div class="icon-wrapper">
+                    <img src="add-24.svg" alt="Add">
+                </div>
+                <div class="icon-name">add-24</div>
+            </div>
+            
+            <div class="icon-card">
+                <div class="icon-wrapper">
+                    <img src="dashboard-line-24.svg" alt="Dashboard">
+                </div>
+                <div class="icon-name">dashboard-line-24</div>
+            </div>
+            
+            <div class="icon-card">
+                <div class="icon-wrapper">
+                    <img src="insight-line-24.svg" alt="Insights">
+                </div>
+                <div class="icon-name">insight-line-24</div>
+            </div>
+            
+            <div class="icon-card">
+                <div class="icon-wrapper">
+                    <img src="promo-bullhorn-line-24.svg" alt="Campaigns">
+                </div>
+                <div class="icon-name">promo-bullhorn-line-24</div>
+            </div>
+        </div>
+        
+        <div class="code-section">
+            <h2>How to Use</h2>
+            
+            <h3 style="margin-top: 24px;">Method 1: Simple Image Tag</h3>
+            <pre>&lt;img src="icons/dashboard-line-24.svg" alt="Dashboard" width="24" height="24"&gt;</pre>
+            <div class="usage-example">
+                <img src="dashboard-line-24.svg" class="example-icon" alt="Dashboard">
+                <span>Dashboard icon using img tag</span>
+            </div>
+            
+            <h3 style="margin-top: 24px;">Method 2: With Color Filters (CSS)</h3>
+            <div class="color-demo">
+                <div>
+                    <img src="promo-bullhorn-line-24.svg" class="example-icon icon-red" alt="Red icon">
+                    <span>Red (#EB1700)</span>
+                </div>
+                <div>
+                    <img src="promo-bullhorn-line-24.svg" class="example-icon icon-green" alt="Green icon">
+                    <span>Green (#00832D)</span>
+                </div>
+                <div>
+                    <img src="promo-bullhorn-line-24.svg" class="example-icon icon-gray" alt="Gray icon">
+                    <span>Gray (#606060)</span>
+                </div>
+            </div>
+            
+            <pre>/* CSS for colored icons */
+.icon-red {
+    filter: invert(21%) sepia(98%) saturate(6088%) 
+            hue-rotate(0deg) brightness(96%) contrast(112%);
+}
+
+.icon-green {
+    filter: invert(39%) sepia(97%) saturate(466%) 
+            hue-rotate(92deg) brightness(92%) contrast(101%);
+}</pre>
+            
+            <h3 style="margin-top: 24px;">Method 3: Inline SVG (Best for CurrentColor)</h3>
+            <p style="font-size: 14px; color: #606060; margin: 8px 0;">Note: For this method, you'll need to copy the SVG code directly from the .svg file</p>
+            <pre>&lt;svg fill="currentColor" width="24" height="24" viewBox="0 0 24 24"&gt;
+    &lt;!-- paste SVG path here --&gt;
+&lt;/svg&gt;</pre>
+            
+            <h3 style="margin-top: 24px;">Method 4: Navigation Menu Example</h3>
+            <pre>&lt;div class="nav-menu-item"&gt;
+    &lt;img src="icons/dashboard-line-24.svg" alt="" width="24" height="24"&gt;
+    &lt;span&gt;Dashboard&lt;/span&gt;
+&lt;/div&gt;</pre>
+        </div>
+        
+        <div class="code-section">
+            <h2>Need More Icons?</h2>
+            <p>Check the <code>PRISM-ICONS-REFERENCE.md</code> file for a complete list of available Prism icons and their Component IDs.</p>
+            <p style="margin-top: 12px;">To request additional icons, specify the icon name and size (e.g., "24/search", "16/close", "24/arrow-right").</p>
+        </div>
+    </div>
+</body>
+</html>
+

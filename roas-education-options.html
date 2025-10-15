@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROAS Education Options</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'TT Norms', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: #F7F7F7;
+            color: #191919;
+            padding: 40px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            font-size: 16px;
+            color: #606060;
+            margin-bottom: 40px;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 24px;
+        }
+
+        .option-card {
+            background: white;
+            border: 1px solid #E7E7E7;
+            border-radius: 12px;
+            padding: 24px;
+            position: relative;
+        }
+
+        .option-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .option-description {
+            font-size: 14px;
+            color: #606060;
+            margin-bottom: 24px;
+        }
+
+        .demo-container {
+            background: #F7F7F7;
+            padding: 24px;
+            border-radius: 8px;
+            position: relative;
+        }
+
+        /* Common styles */
+        .roas-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 0px 4px;
+            height: 20px;
+            background: #F1F1F1;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        /* Option 1: Hover Tooltip */
+        .tooltip-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+
+        .tooltip-content {
+            position: absolute;
+            bottom: calc(100% + 8px);
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            border: 1px solid #E7E7E7;
+            border-radius: 8px;
+            padding: 16px;
+            width: 300px;
+            box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s;
+            z-index: 10;
+        }
+
+        .tooltip-wrapper:hover .tooltip-content {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .tooltip-title {
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .tooltip-text {
+            font-size: 12px;
+            line-height: 1.5;
+            color: #606060;
+            margin-bottom: 12px;
+        }
+
+        .tooltip-scale {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            font-size: 11px;
+        }
+
+        .scale-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .scale-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        .scale-dot.good { background: #00832D; }
+        .scale-dot.okay { background: #F9AB00; }
+        .scale-dot.poor { background: #C5221F; }
+
+        /* Option 2: Info Icon with Popover */
+        .info-icon-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+
+        .info-icon {
+            width: 16px;
+            height: 16px;
+            margin-left: 4px;
+            cursor: pointer;
+            color: #606060;
+        }
+
+        .popover {
+            position: absolute;
+            top: calc(100% + 8px);
+            right: 0;
+            background: white;
+            border: 1px solid #E7E7E7;
+            border-radius: 8px;
+            padding: 16px;
+            width: 320px;
+            box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.1);
+            display: none;
+            z-index: 10;
+        }
+
+        .info-icon-wrapper.active .popover {
+            display: block;
+        }
+
+        .popover-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 12px;
+        }
+
+        .popover-title {
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: #606060;
+            padding: 0;
+            width: 20px;
+            height: 20px;
+        }
+
+        /* Option 3: Inline Expandable */
+        .expandable-wrapper {
+            display: inline-flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .expand-btn {
+            background: none;
+            border: none;
+            color: #EB1700;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            text-decoration: underline;
+            padding: 0;
+            text-align: left;
+        }
+
+        .expanded-content {
+            background: white;
+            border: 1px solid #E7E7E7;
+            border-radius: 8px;
+            padding: 16px;
+            margin-top: 8px;
+            display: none;
+        }
+
+        .expandable-wrapper.active .expanded-content {
+            display: block;
+        }
+
+        /* Option 4: Side Panel */
+        .side-panel-trigger {
+            background: none;
+            border: 1px solid #D6D6D6;
+            border-radius: 8px;
+            padding: 4px 12px;
+            font-size: 12px;
+            font-weight: 700;
+            color: #191919;
+            cursor: pointer;
+            margin-left: 8px;
+        }
+
+        .side-panel {
+            position: fixed;
+            right: -400px;
+            top: 0;
+            width: 400px;
+            height: 100vh;
+            background: white;
+            box-shadow: -4px 0 24px rgba(0, 0, 0, 0.1);
+            transition: right 0.3s;
+            z-index: 100;
+            overflow-y: auto;
+        }
+
+        .side-panel.active {
+            right: 0;
+        }
+
+        .side-panel-header {
+            padding: 24px;
+            border-bottom: 1px solid #E7E7E7;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .side-panel-title {
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .side-panel-content {
+            padding: 24px;
+        }
+
+        .content-section {
+            margin-bottom: 24px;
+        }
+
+        .content-section-title {
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .content-section-text {
+            font-size: 14px;
+            line-height: 1.5;
+            color: #606060;
+            margin-bottom: 12px;
+        }
+
+        .example-box {
+            background: #F7F7F7;
+            border-radius: 8px;
+            padding: 12px;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        /* Option 5: Modal Dialog */
+        .modal-trigger {
+            background: none;
+            border: none;
+            color: #EB1700;
+            font-size: 12px;
+            text-decoration: underline;
+            cursor: pointer;
+            padding: 0;
+            margin-left: 4px;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: white;
+            border-radius: 12px;
+            width: 500px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            padding: 24px 24px 16px;
+            border-bottom: 1px solid #E7E7E7;
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .modal-body {
+            padding: 24px;
+        }
+
+        .modal-footer {
+            padding: 16px 24px;
+            border-top: 1px solid #E7E7E7;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .btn-primary {
+            background: #EB1700;
+            color: white;
+            border: none;
+            border-radius: 9999px;
+            padding: 8px 24px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        /* Option 6: Contextual Banner */
+        .contextual-banner {
+            background: #ECFCFC;
+            border-radius: 8px;
+            padding: 12px 16px;
+            margin-top: 8px;
+            display: flex;
+            gap: 12px;
+            align-items: start;
+        }
+
+        .banner-icon {
+            color: #00838A;
+            flex-shrink: 0;
+        }
+
+        .banner-text {
+            font-size: 12px;
+            line-height: 1.5;
+            color: #191919;
+        }
+
+        .roas-scale {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid rgba(0, 131, 138, 0.2);
+        }
+
+        .scale-segment {
+            flex: 1;
+            text-align: center;
+        }
+
+        .scale-label {
+            font-size: 10px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .scale-label.poor { color: #C5221F; }
+        .scale-label.okay { color: #F9AB00; }
+        .scale-label.good { color: #00832D; }
+
+        .scale-range {
+            font-size: 11px;
+            color: #606060;
+        }
+
+        /* Demo table for context */
+        .demo-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        .demo-table th,
+        .demo-table td {
+            padding: 12px 16px;
+            text-align: left;
+            border-bottom: 1px solid #E7E7E7;
+        }
+
+        .demo-table th {
+            font-weight: 700;
+            font-size: 12px;
+        }
+
+        .demo-table td.align-right {
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>ROAS Education - UI Options</h1>
+        <p class="subtitle">6 different ways to help users understand Return on Ad Spend (ROAS)</p>
+
+        <div class="options-grid">
+            <!-- Option 1: Hover Tooltip -->
+            <div class="option-card">
+                <div class="option-title">Option 1: Hover Tooltip</div>
+                <div class="option-description">Educational content appears when hovering over the ROAS value</div>
+                
+                <div class="demo-container">
+                    <table class="demo-table">
+                        <tr>
+                            <th>Store</th>
+                            <th class="align-right">ROAS</th>
+                        </tr>
+                        <tr>
+                            <td>Boba Folks Tea (Cupertino)</td>
+                            <td class="align-right">
+                                <div class="tooltip-wrapper">
+                                    <span class="roas-tag">6.12x</span>
+                                    <div class="tooltip-content">
+                                        <div class="tooltip-title">Return on Ad Spend (ROAS)</div>
+                                        <div class="tooltip-text">
+                                            For every $1 spent on marketing, you earned $6.12 in sales.
+                                        </div>
+                                        <div class="tooltip-scale">
+                                            <div class="scale-item">
+                                                <div class="scale-dot poor"></div>
+                                                <span><strong>&lt;1x:</strong> Losing money</span>
+                                            </div>
+                                            <div class="scale-item">
+                                                <div class="scale-dot okay"></div>
+                                                <span><strong>1x-3x:</strong> Breaking even</span>
+                                            </div>
+                                            <div class="scale-item">
+                                                <div class="scale-dot good"></div>
+                                                <span><strong>&gt;3x:</strong> Great return</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                    <p style="font-size: 12px; color: #606060; margin-top: 12px;">💡 Hover over the ROAS number</p>
+                </div>
+            </div>
+
+            <!-- Option 2: Info Icon with Popover -->
+            <div class="option-card">
+                <div class="option-title">Option 2: Info Icon + Popover</div>
+                <div class="option-description">Click an info icon next to "ROAS" to open an educational popover</div>
+                
+                <div class="demo-container">
+                    <table class="demo-table">
+                        <tr>
+                            <th>Store</th>
+                            <th class="align-right">
+                                ROAS
+                                <span class="info-icon-wrapper" onclick="this.classList.toggle('active')">
+                                    <svg class="info-icon" viewBox="0 0 16 16" fill="currentColor">
+                                        <path d="M8 1C4.13 1 1 4.13 1 8s3.13 7 7 7 7-3.13 7-7-3.13-7-7-7zm1 10.5h-2v-5h2v5zm0-6.5h-2V3h2v2z"/>
+                                    </svg>
+                                    <div class="popover">
+                                        <div class="popover-header">
+                                            <div class="popover-title">What is ROAS?</div>
+                                            <button class="close-btn" onclick="this.closest('.info-icon-wrapper').classList.remove('active')">×</button>
+                                        </div>
+                                        <div class="tooltip-text">
+                                            <strong>Return on Ad Spend (ROAS)</strong> measures how much revenue you earn for every dollar spent on marketing.
+                                        </div>
+                                        <div class="content-section-title">How to read it:</div>
+                                        <div class="example-box">
+                                            <strong>6.12x</strong> = $6.12 earned per $1 spent
+                                        </div>
+                                        <div class="tooltip-scale">
+                                            <div class="scale-item">
+                                                <div class="scale-dot poor"></div>
+                                                <span><strong>&lt;1x:</strong> Losing money</span>
+                                            </div>
+                                            <div class="scale-item">
+                                                <div class="scale-dot okay"></div>
+                                                <span><strong>1x-3x:</strong> Breaking even to okay</span>
+                                            </div>
+                                            <div class="scale-item">
+                                                <div class="scale-dot good"></div>
+                                                <span><strong>&gt;3x:</strong> Great return!</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </span>
+                            </th>
+                        </tr>
+                        <tr>
+                            <td>Boba Folks Tea (Cupertino)</td>
+                            <td class="align-right"><span class="roas-tag">6.12x</span></td>
+                        </tr>
+                    </table>
+                    <p style="font-size: 12px; color: #606060; margin-top: 12px;">💡 Click the info icon next to "ROAS"</p>
+                </div>
+            </div>
+
+            <!-- Option 3: Inline Expandable -->
+            <div class="option-card">
+                <div class="option-title">Option 3: Inline Expandable</div>
+                <div class="option-description">Click "What does this mean?" to expand educational content inline</div>
+                
+                <div class="demo-container">
+                    <table class="demo-table">
+                        <tr>
+                            <th>Store</th>
+                            <th class="align-right">ROAS</th>
+                        </tr>
+                        <tr>
+                            <td>Boba Folks Tea (Cupertino)</td>
+                            <td class="align-right">
+                                <div class="expandable-wrapper">
+                                    <span class="roas-tag">6.12x</span>
+                                    <button class="expand-btn" onclick="this.closest('.expandable-wrapper').classList.toggle('active')">
+                                        What does this mean?
+                                    </button>
+                                    <div class="expanded-content">
+                                        <div class="tooltip-title">Understanding ROAS</div>
+                                        <div class="tooltip-text">
+                                            <strong>6.12x</strong> means for every $1 you spent on this campaign, you earned $6.12 in sales. This is a great return!
+                                        </div>
+                                        <div class="content-section-title">Quick Guide:</div>
+                                        <div class="tooltip-scale">
+                                            <div class="scale-item">
+                                                <div class="scale-dot poor"></div>
+                                                <span>&lt;1x = Losing money</span>
+                                            </div>
+                                            <div class="scale-item">
+                                                <div class="scale-dot okay"></div>
+                                                <span>1x-3x = Moderate return</span>
+                                            </div>
+                                            <div class="scale-item">
+                                                <div class="scale-dot good"></div>
+                                                <span>&gt;3x = Excellent return</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                    <p style="font-size: 12px; color: #606060; margin-top: 12px;">💡 Click "What does this mean?"</p>
+                </div>
+            </div>
+
+            <!-- Option 4: Side Panel -->
+            <div class="option-card">
+                <div class="option-title">Option 4: Side Panel</div>
+                <div class="option-description">Opens a detailed side panel with comprehensive education</div>
+                
+                <div class="demo-container">
+                    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+                        <span style="font-size: 14px; font-weight: 700;">ROAS</span>
+                        <button class="side-panel-trigger" onclick="document.getElementById('sidePanel').classList.add('active')">
+                            Learn more
+                        </button>
+                    </div>
+                    <table class="demo-table">
+                        <tr>
+                            <th>Store</th>
+                            <th class="align-right">ROAS</th>
+                        </tr>
+                        <tr>
+                            <td>Boba Folks Tea (Cupertino)</td>
+                            <td class="align-right"><span class="roas-tag">6.12x</span></td>
+                        </tr>
+                    </table>
+                    <p style="font-size: 12px; color: #606060; margin-top: 12px;">💡 Click "Learn more" button</p>
+                </div>
+            </div>
+
+            <!-- Option 5: Modal Dialog -->
+            <div class="option-card">
+                <div class="option-title">Option 5: Modal Dialog</div>
+                <div class="option-description">Click link to open a centered modal with detailed explanation</div>
+                
+                <div class="demo-container">
+                    <table class="demo-table">
+                        <tr>
+                            <th>Store</th>
+                            <th class="align-right">ROAS</th>
+                        </tr>
+                        <tr>
+                            <td>Boba Folks Tea (Cupertino)</td>
+                            <td class="align-right">
+                                <span class="roas-tag">6.12x</span>
+                                <button class="modal-trigger" onclick="document.getElementById('modalOverlay').classList.add('active')">
+                                    Learn about ROAS
+                                </button>
+                            </td>
+                        </tr>
+                    </table>
+                    <p style="font-size: 12px; color: #606060; margin-top: 12px;">💡 Click "Learn about ROAS"</p>
+                </div>
+            </div>
+
+            <!-- Option 6: Contextual Banner -->
+            <div class="option-card">
+                <div class="option-title">Option 6: Contextual Banner</div>
+                <div class="option-description">Always-visible banner above the table with educational content</div>
+                
+                <div class="demo-container">
+                    <div class="contextual-banner">
+                        <svg class="banner-icon" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+                        </svg>
+                        <div style="flex: 1;">
+                            <div class="banner-text">
+                                <strong>Understanding ROAS (Return on Ad Spend):</strong> This shows how much revenue you earn for every dollar spent on marketing. For example, 6.12x means you earned $6.12 for every $1 spent.
+                            </div>
+                            <div class="roas-scale">
+                                <div class="scale-segment">
+                                    <div class="scale-label poor">Poor</div>
+                                    <div class="scale-range">&lt; 1x</div>
+                                </div>
+                                <div class="scale-segment">
+                                    <div class="scale-label okay">Moderate</div>
+                                    <div class="scale-range">1x - 3x</div>
+                                </div>
+                                <div class="scale-segment">
+                                    <div class="scale-label good">Excellent</div>
+                                    <div class="scale-range">&gt; 3x</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <table class="demo-table" style="margin-top: 16px;">
+                        <tr>
+                            <th>Store</th>
+                            <th class="align-right">ROAS</th>
+                        </tr>
+                        <tr>
+                            <td>Boba Folks Tea (Cupertino)</td>
+                            <td class="align-right"><span class="roas-tag">6.12x</span></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Side Panel (Global) -->
+    <div id="sidePanel" class="side-panel">
+        <div class="side-panel-header">
+            <div class="side-panel-title">Understanding ROAS</div>
+            <button class="close-btn" onclick="document.getElementById('sidePanel').classList.remove('active')">×</button>
+        </div>
+        <div class="side-panel-content">
+            <div class="content-section">
+                <div class="content-section-title">What is ROAS?</div>
+                <div class="content-section-text">
+                    <strong>Return on Ad Spend (ROAS)</strong> measures the revenue generated for every dollar spent on advertising or marketing campaigns.
+                </div>
+            </div>
+
+            <div class="content-section">
+                <div class="content-section-title">How to read it</div>
+                <div class="example-box">
+                    <strong>Example:</strong> A ROAS of <strong>6.12x</strong> means:
+                    <br>For every $1 spent → You earned $6.12 in sales
+                    <br>For every $100 spent → You earned $612 in sales
+                </div>
+            </div>
+
+            <div class="content-section">
+                <div class="content-section-title">What's a good ROAS?</div>
+                <div class="tooltip-scale">
+                    <div class="scale-item">
+                        <div class="scale-dot poor"></div>
+                        <div>
+                            <strong>Less than 1x</strong>
+                            <div class="content-section-text">You're losing money. For every dollar spent, you're earning less than a dollar back.</div>
+                        </div>
+                    </div>
+                    <div class="scale-item">
+                        <div class="scale-dot okay"></div>
+                        <div>
+                            <strong>1x to 3x</strong>
+                            <div class="content-section-text">Breaking even to moderate return. Your campaign is covering costs but could be optimized.</div>
+                        </div>
+                    </div>
+                    <div class="scale-item">
+                        <div class="scale-dot good"></div>
+                        <div>
+                            <strong>Greater than 3x</strong>
+                            <div class="content-section-text">Excellent return! Your campaign is performing very well and generating strong profits.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-section">
+                <div class="content-section-title">Tips to improve ROAS</div>
+                <div class="content-section-text">
+                    • Target your most valuable customers<br>
+                    • Test different promotional offers<br>
+                    • Optimize campaign timing<br>
+                    • Refine your audience segments
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal (Global) -->
+    <div id="modalOverlay" class="modal-overlay" onclick="if(event.target === this) this.classList.remove('active')">
+        <div class="modal">
+            <div class="modal-header">
+                <div class="modal-title">Understanding ROAS</div>
+            </div>
+            <div class="modal-body">
+                <div class="content-section">
+                    <div class="content-section-title">What is ROAS?</div>
+                    <div class="content-section-text">
+                        <strong>Return on Ad Spend (ROAS)</strong> measures how much revenue you earn for every dollar spent on marketing.
+                    </div>
+                </div>
+
+                <div class="content-section">
+                    <div class="content-section-title">How to read it</div>
+                    <div class="example-box">
+                        <strong>6.12x</strong> means you earned <strong>$6.12</strong> for every <strong>$1</strong> spent on marketing.
+                    </div>
+                </div>
+
+                <div class="content-section">
+                    <div class="content-section-title">Quick guide</div>
+                    <div class="tooltip-scale" style="gap: 12px;">
+                        <div class="scale-item" style="align-items: flex-start;">
+                            <div class="scale-dot poor"></div>
+                            <div>
+                                <strong>&lt; 1x: Losing money</strong>
+                                <div style="font-size: 11px; color: #606060;">Your campaign costs more than it earns</div>
+                            </div>
+                        </div>
+                        <div class="scale-item" style="align-items: flex-start;">
+                            <div class="scale-dot okay"></div>
+                            <div>
+                                <strong>1x - 3x: Moderate return</strong>
+                                <div style="font-size: 11px; color: #606060;">Breaking even to decent performance</div>
+                            </div>
+                        </div>
+                        <div class="scale-item" style="align-items: flex-start;">
+                            <div class="scale-dot good"></div>
+                            <div>
+                                <strong>&gt; 3x: Excellent return</strong>
+                                <div style="font-size: 11px; color: #606060;">Your campaign is highly profitable</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-primary" onclick="document.getElementById('modalOverlay').classList.remove('active')">Got it</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+

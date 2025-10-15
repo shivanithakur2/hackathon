@@ -1,0 +1,1855 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Campaign - Reporting</title>
+    
+    <!-- Google Fonts: Inter (similar to TT Norms) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* TT Norms Font Loading */
+        @font-face {
+            font-family: 'TT Norms';
+            src: url('fonts/subset-TTNorms-Regular.ttf') format('truetype');
+            font-weight: 400;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        @font-face {
+            font-family: 'TT Norms';
+            src: url('fonts/subset-TTNorms-Regular.ttf') format('truetype');
+            font-weight: 500;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        @font-face {
+            font-family: 'TT Norms';
+            src: url('fonts/subset-TTNorms-Bold.ttf') format('truetype');
+            font-weight: 700;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'TT Norms', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: #FFFFFF;
+            color: #191919;
+            display: flex;
+        }
+
+        /* Left Navigation */
+        .left-nav {
+            width: 280px;
+            background: #FFFFFF;
+            border-right: 1px solid #E7E7E7;
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        .left-nav-content {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            padding: 16px;
+        }
+
+        .merchant-header {
+            padding: 24px;
+        }
+
+        .merchant-logo {
+            width: 118px;
+            height: 18px;
+            flex-shrink: 0;
+        }
+        
+        .entity-title {
+            padding: 16px;
+            cursor: pointer;
+            border-radius: 8px;
+            margin: 0 16px 16px 16px;
+            transition: background 0.2s;
+        }
+        
+        .entity-title:hover {
+            background: #F7F7F7;
+        }
+        
+        .entity-name {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            margin-bottom: 2px;
+        }
+        
+        .entity-text {
+            font-family: 'TT Norms', 'Inter', sans-serif;
+            font-size: 20px;
+            font-weight: 700;
+            line-height: 1.2em;
+            letter-spacing: -0.01em;
+            color: #191919;
+        }
+        
+        .entity-chevron {
+            width: 16px !important;
+            height: 16px !important;
+            filter: brightness(0) saturate(100%) invert(11%);
+        }
+        
+        .entity-type {
+            font-family: 'TT Norms', 'Inter', sans-serif;
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 1.428em;
+            color: #191919;
+        }
+
+        .nav-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .nav-menu-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 6px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            color: #494949;
+            transition: background 0.2s;
+        }
+        
+        .nav-menu-item span {
+            flex: 1;
+        }
+        
+        .nav-chevron {
+            margin-left: auto;
+        }
+
+        .nav-menu-item:hover {
+            background: #F7F7F7;
+        }
+
+        .nav-menu-item.selected {
+            background: #FFE8E5;
+            color: #EB1700;
+            font-weight: 500;
+        }
+
+        .nav-menu-item.sub-item {
+            padding-left: 48px;
+            font-weight: 400;
+        }
+
+        .nav-menu-item.sub-item.selected {
+            background: #FFE8E5;
+            font-weight: 600;
+        }
+
+        .nav-menu-item svg,
+        .nav-menu-item img {
+            width: 24px;
+            height: 24px;
+            flex-shrink: 0;
+        }
+        
+        .nav-menu-item img:not(.nav-chevron) {
+            filter: brightness(0) saturate(100%) invert(35%) sepia(0%) saturate(0%) hue-rotate(0deg);
+        }
+        
+        .nav-menu-item.selected img:not(.nav-chevron) {
+            filter: brightness(0) saturate(100%) invert(11%) sepia(97%) saturate(7478%) hue-rotate(10deg) brightness(92%) contrast(108%);
+        }
+        
+        .nav-chevron {
+            width: 16px !important;
+            height: 16px !important;
+            filter: brightness(0) saturate(100%) invert(35%) sepia(0%) saturate(0%) hue-rotate(0deg);
+        }
+        
+        .nav-menu-item.selected .nav-chevron {
+            filter: brightness(0) saturate(100%) invert(11%) sepia(97%) saturate(7478%) hue-rotate(10deg) brightness(92%) contrast(108%);
+        }
+
+        .nav-separator {
+            height: 1px;
+            background: #E7E7E7;
+            margin: 24px 8px;
+        }
+        
+        .nav-section-divider {
+            margin: 24px 0 8px 0;
+            font-size: 14px;
+            color: #767676;
+            font-weight: 400;
+            padding-left: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .profile-dropdown {
+            padding: 0 15px 16px 15px;
+            margin-top: auto;
+        }
+        
+        .profile-field {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 12px 16px;
+            background: white;
+            border: 1px solid #D6D6D6;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .profile-field:hover {
+            background: #F7F7F7;
+            border-color: #BFBFBF;
+        }
+        
+        .profile-icon {
+            width: 24px !important;
+            height: 24px !important;
+            filter: brightness(0) saturate(100%) invert(11%);
+            flex-shrink: 0;
+        }
+        
+        .profile-name {
+            font-family: 'TT Norms', 'Inter', sans-serif;
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 1.428em;
+            color: #191919;
+            flex: 1;
+        }
+        
+        .profile-chevron {
+            width: 24px !important;
+            height: 24px !important;
+            filter: brightness(0) saturate(100%) invert(11%);
+            flex-shrink: 0;
+        }
+
+        /* Main content wrapper */
+        .main-wrapper {
+            margin-left: 280px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+
+        /* Main Content */
+        .main-content {
+            padding: 48px 64px;
+            max-width: 1440px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Page Header */
+        .page-header {
+            margin-bottom: 36px;
+        }
+
+        .breadcrumbs {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .breadcrumb-link {
+            font-size: 14px;
+            font-weight: 700;
+            color: #191919;
+            text-decoration: none;
+            line-height: 16px;
+        }
+
+        .breadcrumb-separator {
+            color: #606060;
+            font-size: 14px;
+        }
+
+        .page-title-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 32px;
+        }
+
+        .page-title-left {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .page-title {
+            font-size: 32px;
+            font-weight: 700;
+            line-height: 1.25em;
+            color: #191919;
+        }
+
+        .page-meta {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .status-tag {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 0 0;
+            background: transparent;
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 12px;
+            height: 20px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #00832D;
+        }
+
+        .status-text {
+            font-size: 14px;
+            font-weight: 500;
+            color: #00832D;
+            line-height: 1.4285em;
+        }
+
+        .meta-separator {
+            color: #606060;
+        }
+
+        .date-range {
+            font-size: 16px;
+            color: #606060;
+            line-height: 1.375em;
+        }
+
+        .page-actions {
+            display: flex;
+            gap: 16px;
+        }
+
+        .filter-button {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 2px 12px;
+            height: 40px;
+            border: 1px solid #D6D6D6;
+            border-radius: 9999px;
+            background: white;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        /* Tabs */
+        .tabs-container {
+            display: flex;
+            border-bottom: 1px solid #E7E7E7;
+            margin-bottom: 32px;
+        }
+
+        .tab {
+            padding: 2px 0;
+            margin-right: 12px;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .tab-label {
+            font-size: 16px;
+            font-weight: 500;
+            color: #606060;
+            line-height: 1.375em;
+            padding: 10px 0;
+        }
+
+        .tab.active .tab-label {
+            font-weight: 700;
+            color: #191919;
+        }
+
+        .tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: #191919;
+            border-radius: 4px 4px 0 0;
+        }
+
+        /* Content Sections */
+        .content-section {
+            margin-bottom: 72px;
+        }
+
+        .section-title {
+            font-size: 24px;
+            font-weight: 700;
+            line-height: 1.1666em;
+            margin-bottom: 16px;
+        }
+
+        /* KPI Cards */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .kpi-card {
+            padding: 16px 24px;
+            border: 1px solid #E7E7E7;
+            border-radius: 12px;
+            background: white;
+        }
+
+        .kpi-title {
+            font-size: 14px;
+            font-weight: 500;
+            color: #191919;
+            margin-bottom: 4px;
+            line-height: 1.4285em;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .kpi-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #191919;
+            line-height: 1.1666em;
+        }
+
+        /* Sales Breakdown */
+        .sales-breakdown {
+            border: 1px solid #E7E7E7;
+            border-radius: 12px;
+            padding: 16px 24px;
+        }
+
+        .breakdown-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 32px;
+        }
+
+        .breakdown-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #E7E7E7;
+        }
+
+        .breakdown-item:last-child {
+            border-bottom: none;
+        }
+
+        .breakdown-label {
+            font-size: 14px;
+            font-weight: 500;
+            color: #191919;
+        }
+
+        .breakdown-value {
+            font-size: 14px;
+            color: #191919;
+        }
+
+        /* Performance Section */
+        .performance-controls {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .toggle-group {
+            display: flex;
+            border: 2px solid #D6D6D6;
+            border-radius: 9999px;
+            padding: 0;
+        }
+
+        .toggle-button {
+            padding: 4px 12px;
+            font-size: 14px;
+            font-weight: 700;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            border-radius: 9999px;
+            height: 40px;
+        }
+
+        .toggle-button.active {
+            background: white;
+            border: 2px solid #191919;
+        }
+
+        /* Chart Container */
+        .chart-container {
+            border: 1px solid #E7E7E7;
+            border-radius: 12px;
+            padding: 32px 24px 24px;
+        }
+
+        .chart-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #191919;
+            margin-bottom: 60px;
+        }
+
+        .chart-area {
+            height: 280px;
+            position: relative;
+            margin-bottom: 24px;
+            background: white;
+        }
+
+        .chart-placeholder {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            border-bottom: 1px solid #E7E7E7;
+        }
+
+        /* Y-axis labels */
+        .y-axis {
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 50px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            font-size: 12px;
+            color: #494949;
+            padding: 9px 0;
+        }
+
+        .y-axis-label {
+            text-align: right;
+            line-height: 1em;
+        }
+
+        /* X-axis labels */
+        .x-axis {
+            position: absolute;
+            left: 50px;
+            right: 0;
+            bottom: 0;
+            height: 20px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: #494949;
+        }
+
+        /* Chart lines */
+        .chart-lines {
+            position: absolute;
+            left: 50px;
+            right: 0;
+            top: 9px;
+            bottom: 20px;
+        }
+
+        .chart-line {
+            position: absolute;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: #F7F7F7;
+        }
+
+        .chart-line:nth-child(1) { top: 0; }
+        .chart-line:nth-child(2) { top: 50%; }
+        .chart-line:nth-child(3) { bottom: 0; background: #E7E7E7; }
+
+        /* Data visualization */
+        .chart-data {
+            position: absolute;
+            left: 50px;
+            right: 0;
+            top: 9px;
+            bottom: 20px;
+        }
+
+        /* Chart SVG */
+        .chart-svg {
+            position: absolute;
+            left: 50px;
+            right: 0;
+            top: 9px;
+            bottom: 20px;
+            width: calc(100% - 50px);
+            height: calc(100% - 29px);
+        }
+
+        /* Tooltip */
+        .chart-tooltip {
+            position: absolute;
+            background: white;
+            border: 1px solid #E7E7E7;
+            border-radius: 8px;
+            padding: 12px;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.2s;
+            z-index: 10;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            top: -80px;
+            transform: translateX(-50%);
+            min-width: 180px;
+        }
+
+        .chart-tooltip.visible {
+            opacity: 1;
+        }
+
+        .tooltip-date {
+            font-size: 12px;
+            color: #191919;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .tooltip-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 4px;
+        }
+
+        .tooltip-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .tooltip-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        .tooltip-dot.purple {
+            background: #8754DE;
+        }
+
+        .tooltip-dot.teal {
+            background: #2AA4A9;
+        }
+
+        .tooltip-label {
+            font-size: 12px;
+            color: #191919;
+            flex: 1;
+        }
+
+        .tooltip-value {
+            font-size: 12px;
+            font-weight: 700;
+            color: #191919;
+        }
+
+        /* Hover line */
+        .hover-line {
+            position: absolute;
+            top: 0;
+            bottom: 20px;
+            width: 1px;
+            background: #D6D6D6;
+            opacity: 0;
+            transition: opacity 0.2s;
+            pointer-events: none;
+        }
+
+        .hover-line.visible {
+            opacity: 1;
+        }
+
+        /* Hover dots */
+        .hover-dot {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            border: 2px solid white;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            transition: opacity 0.2s;
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            z-index: 5;
+        }
+
+        .hover-dot.visible {
+            opacity: 1;
+        }
+
+        .hover-dot.purple {
+            background: #8754DE;
+        }
+
+        .hover-dot.teal {
+            background: #2AA4A9;
+        }
+
+        /* Interactive overlay */
+        .chart-overlay {
+            position: absolute;
+            left: 50px;
+            right: 0;
+            top: 9px;
+            bottom: 20px;
+            cursor: crosshair;
+        }
+
+        .chart-legend {
+            display: flex;
+            gap: 24px;
+            padding: 12px 16px;
+            background: #F7F7F7;
+            border-radius: 8px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .legend-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        .legend-dot.purple {
+            background: #8754DE;
+        }
+
+        .legend-dot.teal {
+            background: #2AA4A9;
+        }
+
+        .legend-label {
+            font-size: 14px;
+            font-weight: 500;
+            color: #606060;
+        }
+
+        /* Banner */
+        .info-banner {
+            background: #ECFCFC;
+            border-radius: 8px;
+            padding: 16px;
+            display: flex;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .banner-icon {
+            width: 24px;
+            height: 24px;
+            flex-shrink: 0;
+        }
+
+        .banner-content {
+            flex: 1;
+        }
+
+        .banner-text {
+            font-size: 14px;
+            line-height: 1.4285em;
+            color: #191919;
+        }
+
+        .banner-close {
+            width: 40px;
+            height: 40px;
+            border: none;
+            background: transparent;
+            border-radius: 9999px;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        /* Customer Breakdown */
+        .customer-breakdown {
+            border: 1px solid #E7E7E7;
+            border-radius: 12px;
+            overflow: hidden;
+            background: white;
+        }
+
+        .customer-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .customer-table thead tr {
+            border-bottom: 1px solid #E7E7E7;
+        }
+
+        .customer-table th {
+            padding: 16px;
+            text-align: center;
+            font-family: 'TT Norms', 'Inter', sans-serif;
+            font-size: 16px;
+            font-weight: 500;
+            line-height: 22px;
+            color: #191919;
+            border-right: 1px solid #E7E7E7;
+            background: white;
+            vertical-align: top;
+        }
+
+        .customer-table th:first-child {
+            text-align: left;
+            font-weight: 500;
+            color: #606060;
+        }
+
+        .customer-table th:last-child {
+            border-right: none;
+        }
+
+        .customer-header-desc {
+            font-family: 'TT Norms', 'Inter', sans-serif;
+            font-size: 12px;
+            font-weight: 400;
+            line-height: 18px;
+            color: #606060;
+            margin-top: 4px;
+            text-align: center;
+            max-width: 300px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .customer-table tbody td {
+            padding: 24px;
+            text-align: right;
+            font-family: 'TT Norms', 'Inter', sans-serif;
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 20px;
+            color: #191919;
+            border-right: 1px solid #E7E7E7;
+        }
+
+        .customer-table tbody td:first-child {
+            text-align: left;
+            font-size: 14px;
+            font-weight: 500;
+            color: #606060;
+        }
+
+        .customer-table tbody td:last-child {
+            border-right: none;
+        }
+
+        /* Table */
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .search-input {
+            width: 343px;
+            padding: 8px 12px;
+            border: 1px solid #F7F7F7;
+            background: #F7F7F7;
+            border-radius: 8px;
+            font-size: 14px;
+            height: 40px;
+        }
+
+        .search-input::placeholder {
+            color: #606060;
+        }
+
+        .table-container {
+            border: 1px solid #E7E7E7;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            text-align: left;
+            padding: 8px 16px;
+            font-size: 12px;
+            font-weight: 500;
+            color: #191919;
+            border-bottom: 2px solid #E7E7E7;
+            background: white;
+        }
+
+        th.align-right {
+            text-align: right;
+        }
+
+        td {
+            padding: 8px 16px;
+            font-size: 14px;
+            color: #191919;
+            border-bottom: 1px solid #E7E7E7;
+            height: 48px;
+        }
+
+        td.align-right {
+            text-align: right;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .status-badge-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #00832D;
+        }
+
+        .roas-tag {
+            display: inline-block;
+            padding: 0 4px;
+            background: #F1F1F1;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 700;
+            line-height: 20px;
+        }
+
+        /* Pagination */
+        .table-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px;
+            background: white;
+        }
+
+        .pagination-info {
+            font-size: 14px;
+            color: #191919;
+        }
+
+        .pagination-controls {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .page-button {
+            width: 32px;
+            height: 32px;
+            border: 1px solid #F7F7F7;
+            background: white;
+            border-radius: 9999px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .page-button.active {
+            border: 1px solid #191919;
+            background: white;
+            font-weight: 700;
+        }
+
+        .page-button:disabled {
+            background: #F7F7F7;
+            cursor: not-allowed;
+            opacity: 0.5;
+        }
+
+        .per-page-button {
+            padding: 4px 12px;
+            height: 40px;
+            border: 1px solid #D6D6D6;
+            background: white;
+            border-radius: 9999px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* Side Panel for ROAS Education */
+        .roas-header-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 8px;
+        }
+        
+        th.align-right .roas-header-wrapper {
+            width: 100%;
+        }
+
+        .learn-more-btn {
+            background: none;
+            border: none;
+            padding: 0;
+            font-size: 14px;
+            font-weight: 400;
+            color: #191919;
+            cursor: pointer;
+            white-space: nowrap;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            text-decoration: underline;
+        }
+
+        .learn-more-btn:hover {
+            color: #494949;
+        }
+
+        .learn-more-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            border: 1.5px solid #191919;
+            font-size: 11px;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .side-panel {
+            position: fixed;
+            right: -560px;
+            top: 0;
+            width: 560px;
+            height: 100vh;
+            background: white;
+            box-shadow: -4px 0 24px rgba(0, 0, 0, 0.15);
+            transition: right 0.3s ease;
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .side-panel.active {
+            right: 0;
+        }
+
+        .side-panel-header {
+            padding: 32px 40px;
+            border-bottom: 1px solid #E7E7E7;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .side-panel-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #191919;
+            line-height: 1.3;
+            padding-right: 40px;
+        }
+
+        .side-panel-close {
+            background: none;
+            border: none;
+            font-size: 28px;
+            cursor: pointer;
+            color: #606060;
+            padding: 0;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            flex-shrink: 0;
+        }
+
+        .side-panel-close:hover {
+            background: #F7F7F7;
+        }
+
+        .side-panel-content {
+            padding: 32px 40px 40px 40px;
+        }
+
+        .panel-section {
+            margin-bottom: 32px;
+        }
+
+        .panel-section-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: #191919;
+        }
+
+        .panel-section-text {
+            font-size: 15px;
+            line-height: 1.6;
+            color: #191919;
+            margin-bottom: 0;
+        }
+
+        .panel-example-box {
+            background: #F7F7F7;
+            border-radius: 8px;
+            padding: 16px;
+            font-size: 15px;
+            margin-top: 12px;
+            color: #191919;
+            line-height: 1.6;
+        }
+
+        .panel-scale {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .panel-scale-item {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+        }
+
+        .panel-scale-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            margin-top: 3px;
+        }
+
+        .panel-scale-dot.poor { background: #C5221F; }
+        .panel-scale-dot.okay { background: #F9AB00; }
+        .panel-scale-dot.good { background: #00832D; }
+
+        .panel-scale-content strong {
+            font-size: 14px;
+            color: #191919;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .panel-scale-content .description {
+            font-size: 12px;
+            color: #606060;
+            line-height: 1.4;
+        }
+
+        .side-panel-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.3);
+            z-index: 999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .side-panel-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+    </style>
+</head>
+<body>
+    <!-- Left Navigation -->
+    <div class="left-nav">
+        <div class="left-nav-content">
+            <!-- Merchant Header -->
+            <div class="merchant-header">
+                <svg class="merchant-logo" viewBox="0 0 118 18" fill="none">
+                    <rect x="0" y="1" width="28.22" height="16.5" rx="2" fill="#EB1700"/>
+                    <text x="36" y="14" font-family="TT Norms, Arial, sans-serif" font-weight="700" font-size="18" fill="#191919">Merchant</text>
+                </svg>
+            </div>
+            
+            <!-- Entity Title -->
+            <div class="entity-title">
+                <div class="entity-name">
+                    <span class="entity-text">Boba Folks Tea</span>
+                    <img src="icons/chevron-down-16.svg" alt="" width="16" height="16" class="entity-chevron">
+                </div>
+                <div class="entity-type">Business</div>
+            </div>
+            
+            <div class="nav-menu">
+                <div class="nav-menu-item">
+                    <img src="icons/home-line-24.svg" alt="" width="24" height="24">
+                    <span>Home</span>
+                </div>
+                
+                <div class="nav-menu-item">
+                    <img src="icons/insight-line-24.svg" alt="" width="24" height="24">
+                    <span>Insights</span>
+                    <img src="icons/chevron-down-16.svg" alt="" width="16" height="16" class="nav-chevron">
+                </div>
+                
+                <div class="nav-menu-item">
+                    <img src="icons/run-test-24.svg" alt="" width="24" height="24">
+                    <span>Reports</span>
+                </div>
+                
+                <div class="nav-menu-item">
+                    <img src="icons/people-group-24.svg" alt="" width="24" height="24">
+                    <span>Customers</span>
+                    <img src="icons/chevron-down-16.svg" alt="" width="16" height="16" class="nav-chevron">
+                </div>
+                
+                <div class="nav-menu-item">
+                    <img src="icons/order-hotbag-line-24.svg" alt="" width="24" height="24">
+                    <span>Orders</span>
+                </div>
+                
+                <div class="nav-menu-item">
+                    <img src="icons/location-pin-enabled-line-24.svg" alt="" width="24" height="24">
+                    <span>Stores</span>
+                </div>
+                
+                <div class="nav-menu-item selected">
+                    <img src="icons/promo-bullhorn-line-24.svg" alt="" width="24" height="24">
+                    <span>Marketing</span>
+                    <img src="icons/chevron-up-16.svg" alt="" width="16" height="16" class="nav-chevron">
+                </div>
+                
+                <div class="nav-menu-item">
+                    <img src="icons/money-circle-enabled-line-24.svg" alt="" width="24" height="24">
+                    <span>Financials</span>
+                    <img src="icons/chevron-down-16.svg" alt="" width="16" height="16" class="nav-chevron">
+                </div>
+                
+                <div class="nav-menu-item">
+                    <img src="icons/person-profile-line-24.svg" alt="" width="24" height="24">
+                    <span>Manage users</span>
+                </div>
+                
+                <div class="nav-menu-item">
+                    <img src="icons/settings-24.svg" alt="" width="24" height="24">
+                    <span>Settings</span>
+                    <img src="icons/chevron-down-16.svg" alt="" width="16" height="16" class="nav-chevron">
+                </div>
+                
+                <div class="nav-separator"></div>
+                
+                <div class="nav-menu-item">
+                    <img src="icons/add-square-line-24.svg" alt="" width="24" height="24">
+                    <span>Add solutions</span>
+                </div>
+                
+                <div class="nav-section-divider">Channels</div>
+                
+                <div class="nav-menu-item">
+                    <img src="icons/merchant-line-24.svg" alt="" width="24" height="24">
+                    <span>Storefront</span>
+                </div>
+                
+                <div class="nav-menu-item">
+                    <img src="icons/vehicle-car-24.svg" alt="" width="24" height="24">
+                    <span>Request a delivery</span>
+                </div>
+                
+                <div class="nav-separator"></div>
+                
+                <div class="nav-menu-item">
+                    <img src="icons/help-circle-line-24.svg" alt="" width="24" height="24">
+                    <span>Help</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Profile Dropdown -->
+        <div class="profile-dropdown">
+            <div class="profile-field">
+                <img src="icons/person-profile-line-24.svg" alt="" width="24" height="24" class="profile-icon">
+                <span class="profile-name">Shivani Thakur</span>
+                <img src="icons/chevron-down-16.svg" alt="" width="16" height="16" class="profile-chevron">
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Wrapper -->
+    <div class="main-wrapper">
+        <!-- Main Content -->
+    <div class="main-content">
+        <!-- Page Header -->
+        <div class="page-header">
+            <div class="breadcrumbs">
+                <a href="#" class="breadcrumb-link">Campaigns</a>
+                <span class="breadcrumb-separator">/</span>
+            </div>
+
+            <div class="page-title-section">
+                <div class="page-title-left">
+                    <h1 class="page-title">Smart campaign</h1>
+                    <div class="page-meta">
+                        <div class="status-tag">
+                            <div class="status-indicator">
+                                <div class="status-dot"></div>
+                            </div>
+                            <span class="status-text">Active</span>
+                        </div>
+                        <span class="meta-separator">•</span>
+                        <span class="date-range">Jan 1, 2023 - Ongoing</span>
+                    </div>
+                </div>
+                <div class="page-actions">
+                    <button class="filter-button">Last 90 days ▼</button>
+                    <button class="filter-button">All stores ▼</button>
+                </div>
+            </div>
+
+            <!-- Tabs -->
+            <div class="tabs-container">
+                <div class="tab active">
+                    <div class="tab-label">Performance</div>
+                </div>
+                <div class="tab">
+                    <div class="tab-label">Details</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Overview Section -->
+        <div class="content-section">
+            <h2 class="section-title">Overview</h2>
+            
+            <!-- KPI Cards -->
+            <div class="kpi-grid">
+                <div class="kpi-card">
+                    <div class="kpi-title">Campaign sales</div>
+                    <div class="kpi-value">$83,939.77</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-title">Marketing spend</div>
+                    <div class="kpi-value">$12,307.88</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-title">Return on ad spend</div>
+                    <div class="kpi-value">6.82x</div>
+                    <button class="learn-more-btn" onclick="openRoasPanel()" style="margin-top: 8px;">Learn more</button>
+                </div>
+            </div>
+
+            <!-- Sales Breakdown -->
+            <div class="sales-breakdown">
+                <div class="breakdown-grid">
+                    <div>
+                        <div class="breakdown-item">
+                            <span class="breakdown-label">Total orders</span>
+                            <span class="breakdown-value">921</span>
+                        </div>
+                        <div class="breakdown-item">
+                            <span class="breakdown-label">New customers</span>
+                            <span class="breakdown-value">255</span>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="breakdown-item">
+                            <span class="breakdown-label">Avg. spend per order</span>
+                            <span class="breakdown-value">$4.24</span>
+                        </div>
+                        <div class="breakdown-item">
+                            <span class="breakdown-label">Avg. ticket size</span>
+                            <span class="breakdown-value">$28.92</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Performance Over Time -->
+        <div class="content-section">
+            <h2 class="section-title">Performance over time</h2>
+            
+            <div class="performance-controls">
+                <div class="toggle-group">
+                    <button class="toggle-button active">Sales</button>
+                    <button class="toggle-button">Orders</button>
+                    <button class="toggle-button">New customers</button>
+                </div>
+            </div>
+
+            <div class="chart-container">
+                <div class="chart-title">$83,939.77 in sales driven by this campaign</div>
+                <div class="chart-area">
+                    <div class="chart-placeholder">
+                        <!-- Y-axis -->
+                        <div class="y-axis">
+                            <div class="y-axis-label">$2,000</div>
+                            <div class="y-axis-label">$500</div>
+                            <div class="y-axis-label">$0</div>
+                        </div>
+                        
+                        <!-- Horizontal grid lines -->
+                        <div class="chart-lines">
+                            <div class="chart-line"></div>
+                            <div class="chart-line"></div>
+                            <div class="chart-line"></div>
+                        </div>
+                        
+                        <!-- Chart SVG -->
+                        <svg class="chart-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+                            <!-- Total sales (purple) gradient area -->
+                            <defs>
+                                <linearGradient id="purpleGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#8754DE;stop-opacity:0.2" />
+                                    <stop offset="100%" style="stop-color:#8754DE;stop-opacity:0" />
+                                </linearGradient>
+                                <linearGradient id="tealGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#2AA4A9;stop-opacity:0.15" />
+                                    <stop offset="100%" style="stop-color:#2AA4A9;stop-opacity:0" />
+                                </linearGradient>
+                            </defs>
+                            
+                            <!-- Total sales area -->
+                            <path d="M 0 75 L 3 78 L 7 72 L 10 70 L 15 68 L 20 62 L 25 58 L 30 54 L 35 48 L 40 45 L 45 42 L 50 38 L 55 35 L 60 32 L 65 28 L 70 25 L 75 22 L 80 18 L 85 15 L 90 18 L 95 20 L 100 18 L 100 100 L 0 100 Z" 
+                                  fill="url(#purpleGradient)" vector-effect="non-scaling-stroke"/>
+                            
+                            <!-- Total sales line -->
+                            <path d="M 0 75 L 3 78 L 7 72 L 10 70 L 15 68 L 20 62 L 25 58 L 30 54 L 35 48 L 40 45 L 45 42 L 50 38 L 55 35 L 60 32 L 65 28 L 70 25 L 75 22 L 80 18 L 85 15 L 90 18 L 95 20 L 100 18" 
+                                  fill="none" stroke="#8754DE" stroke-width="2" vector-effect="non-scaling-stroke"/>
+                            
+                            <!-- Campaign sales area -->
+                            <path d="M 0 82 L 3 83 L 7 81 L 10 80 L 15 78 L 20 76 L 25 74 L 30 72 L 35 68 L 40 65 L 45 62 L 50 58 L 55 55 L 60 52 L 65 48 L 70 52 L 75 55 L 80 58 L 85 60 L 90 62 L 95 60 L 100 58 L 100 100 L 0 100 Z" 
+                                  fill="url(#tealGradient)" vector-effect="non-scaling-stroke"/>
+                            
+                            <!-- Campaign sales line -->
+                            <path d="M 0 82 L 3 83 L 7 81 L 10 80 L 15 78 L 20 76 L 25 74 L 30 72 L 35 68 L 40 65 L 45 62 L 50 58 L 55 55 L 60 52 L 65 48 L 70 52 L 75 55 L 80 58 L 85 60 L 90 62 L 95 60 L 100 58" 
+                                  fill="none" stroke="#2AA4A9" stroke-width="2" vector-effect="non-scaling-stroke"/>
+                        </svg>
+                        
+                        <!-- Hover elements -->
+                        <div class="hover-line"></div>
+                        <div class="hover-dot purple"></div>
+                        <div class="hover-dot teal"></div>
+                        
+                        <!-- Tooltip -->
+                        <div class="chart-tooltip">
+                            <div class="tooltip-date">July 12, 2025</div>
+                            <div class="tooltip-item">
+                                <div class="tooltip-dot purple"></div>
+                                <span class="tooltip-label">Total sales</span>
+                                <span class="tooltip-value">$1,950.30</span>
+                            </div>
+                            <div class="tooltip-item">
+                                <div class="tooltip-dot teal"></div>
+                                <span class="tooltip-label">Campaign sales</span>
+                                <span class="tooltip-value">$419.33</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Interactive overlay -->
+                        <div class="chart-overlay"></div>
+                        
+                        <!-- X-axis -->
+                        <div class="x-axis">
+                            <div>06/29/2025</div>
+                            <div>07/29/2025</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="chart-legend">
+                    <div class="legend-item">
+                        <div class="legend-dot purple"></div>
+                        <span class="legend-label">Campaign sales, June 29 - July 29, 2025</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-dot teal"></div>
+                        <span class="legend-label">Total sales, June 29 - July 29, 2025</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Customer Insights -->
+        <div class="content-section">
+            <h2 class="section-title">Customer insights</h2>
+            
+            <!-- Info Banner -->
+            <div class="info-banner">
+                <svg class="banner-icon" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1zm3-19C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7zm2.85 11.1l-.85.6V16h-4v-2.3l-.85-.6C7.8 12.16 7 10.63 7 9c0-2.76 2.24-5 5-5s5 2.24 5 5c0 1.63-.8 3.16-2.15 4.1z" fill="#00838A"/>
+                </svg>
+                <div class="banner-content">
+                    <p class="banner-text">Smart campaigns are personalized for every customer, including discounts to attract new customers and higher cart minimums to encourage larger ticket sizes from existing customers.</p>
+                </div>
+                <button class="banner-close">×</button>
+            </div>
+
+            <!-- Customer Breakdown -->
+            <div class="customer-breakdown">
+                <table class="customer-table">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>
+                                <div>New customers</div>
+                                <div class="customer-header-desc">Never bought from your business.</div>
+                            </th>
+                            <th>
+                                <div>Lapsed customers</div>
+                                <div class="customer-header-desc">Haven't bought from your business within the last six months or longer.</div>
+                            </th>
+                            <th>
+                                <div>Existing customers</div>
+                                <div class="customer-header-desc">Bought from your business within the last six months.</div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Customers</td>
+                            <td>255</td>
+                            <td>210</td>
+                            <td>456</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Store Breakdown -->
+        <div class="content-section">
+            <div class="table-header">
+                <h2 class="section-title">Store breakdown</h2>
+                <input type="text" class="search-input" placeholder="Search for campaign">
+            </div>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Status</th>
+                            <th>Start date</th>
+                            <th>End date</th>
+                            <th class="align-right">Sales</th>
+                            <th class="align-right">New customers</th>
+                            <th class="align-right">Spend</th>
+                            <th class="align-right">
+                                <div class="roas-header-wrapper">
+                                    <span>ROAS</span>
+                                    <button class="learn-more-btn" onclick="openRoasPanel()">Learn more</button>
+                                </div>
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Boba Folks Tea (Cupertino)</td>
+                            <td>
+                                <div class="status-badge">
+                                    <div class="status-badge-dot"></div>
+                                    <span>Active</span>
+                                </div>
+                            </td>
+                            <td>1/1/2025</td>
+                            <td>None</td>
+                            <td class="align-right">$7,552.63</td>
+                            <td class="align-right">149</td>
+                            <td class="align-right">$18.65</td>
+                            <td class="align-right">
+                                <span class="roas-tag">6.12x</span>
+                            </td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Boba Folks Tea (Mission St)</td>
+                            <td>
+                                <div class="status-badge">
+                                    <div class="status-badge-dot"></div>
+                                    <span>Active</span>
+                                </div>
+                            </td>
+                            <td>1/1/2025</td>
+                            <td>None</td>
+                            <td class="align-right">$7,552.63</td>
+                            <td class="align-right">323</td>
+                            <td class="align-right">$27.57</td>
+                            <td class="align-right">
+                                <span class="roas-tag">5.12x</span>
+                            </td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Boba Folks Tea (Beach St)</td>
+                            <td>
+                                <div class="status-badge">
+                                    <div class="status-badge-dot"></div>
+                                    <span>Active</span>
+                                </div>
+                            </td>
+                            <td>1/1/2025</td>
+                            <td>None</td>
+                            <td class="align-right">$7,552.63</td>
+                            <td class="align-right">323</td>
+                            <td class="align-right">$22.34</td>
+                            <td class="align-right">
+                                <span class="roas-tag">6.12x</span>
+                            </td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Boba Folks Tea (Oakland)</td>
+                            <td>
+                                <div class="status-badge">
+                                    <div class="status-badge-dot"></div>
+                                    <span>Active</span>
+                                </div>
+                            </td>
+                            <td>1/1/2025</td>
+                            <td>None</td>
+                            <td class="align-right">$7,552.63</td>
+                            <td class="align-right">323</td>
+                            <td class="align-right">$22.34</td>
+                            <td class="align-right">
+                                <span class="roas-tag">6.12x</span>
+                            </td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Boba Folks Tea (Menlo Park)</td>
+                            <td>
+                                <div class="status-badge">
+                                    <div class="status-badge-dot"></div>
+                                    <span>Active</span>
+                                </div>
+                            </td>
+                            <td>1/1/2025</td>
+                            <td>None</td>
+                            <td class="align-right">$7,552.63</td>
+                            <td class="align-right">323</td>
+                            <td class="align-right">$22.34</td>
+                            <td class="align-right">
+                                <span class="roas-tag">6.12x</span>
+                            </td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <!-- Table Footer -->
+                <div class="table-footer">
+                    <div class="pagination-info">1–5 of 5 stores</div>
+                    <div class="pagination-controls">
+                        <button class="page-button" disabled>←</button>
+                        <button class="page-button active">1</button>
+                        <button class="page-button" disabled>→</button>
+                        <button class="per-page-button">20 per page ▼</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <!-- Side Panel Overlay -->
+    <div class="side-panel-overlay" id="roasPanelOverlay" onclick="closeRoasPanel()"></div>
+
+    <!-- ROAS Education Side Panel -->
+    <div class="side-panel" id="roasPanel">
+        <div class="side-panel-header">
+            <div class="side-panel-title">Understanding ROAS</div>
+            <button class="side-panel-close" onclick="closeRoasPanel()">×</button>
+        </div>
+        <div class="side-panel-content">
+            <div class="panel-section">
+                <div class="panel-section-title">What ROAS means</div>
+                <div class="panel-section-text">
+                    <strong>ROAS (Return on Ad Spend)</strong> tells you how much sales your campaign generated for every $1 spent on marketing — including discounts and DoorDash fees.
+                </div>
+                <div class="panel-example-box">
+                    <strong>Example:</strong> A ROAS of <strong>5.0x</strong> means you made $5 in sales for every $1 in spend.
+                </div>
+            </div>
+
+            <div class="panel-section">
+                <div class="panel-section-title">Why Smart Campaign ROAS looks different</div>
+                <div class="panel-section-text">
+                    Smart Campaigns optimize for <strong>incremental growth</strong>, not just efficiency.
+                    <br><br>
+                    A <strong>very high ROAS</strong> often means your campaign reached customers who were likely to order anyway.
+                    <br><br>
+                    A <strong>moderate or lower ROAS</strong> can actually be healthier — it means your campaign is reaching new or lapsed customers and driving true sales growth over time.
+                </div>
+            </div>
+
+            <div class="panel-section">
+                <div class="panel-section-title">What else to track</div>
+                <div class="panel-section-text">
+                    ROAS is just one part of the story. Check these metrics together for a full view of success:
+                    <br><br>
+                    <strong>Net Sales Lift:</strong> Sales minus promo spend — best sign of profitable growth.
+                    <br><br>
+                    <strong>Customer Mix:</strong> Growth in new and lapsed customers = strong incrementality.
+                    <br><br>
+                    <strong>Take-Home Pay:</strong> Shows how Smart Campaigns improve your actual earnings.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openRoasPanel() {
+            document.getElementById('roasPanel').classList.add('active');
+            document.getElementById('roasPanelOverlay').classList.add('active');
+        }
+
+        function closeRoasPanel() {
+            document.getElementById('roasPanel').classList.remove('active');
+            document.getElementById('roasPanelOverlay').classList.remove('active');
+        }
+
+        // Chart hover interaction
+        document.addEventListener('DOMContentLoaded', function() {
+            const chartOverlay = document.querySelector('.chart-overlay');
+            const tooltip = document.querySelector('.chart-tooltip');
+            const hoverLine = document.querySelector('.hover-line');
+            const purpleDot = document.querySelector('.hover-dot.purple');
+            const tealDot = document.querySelector('.hover-dot.teal');
+            
+            if (!chartOverlay) return;
+            
+            // Sample data for 30 days (June 29 - July 29)
+            const dates = [];
+            const totalSales = [];
+            const campaignSales = [];
+            
+            const startDate = new Date('2025-06-29');
+            for (let i = 0; i < 30; i++) {
+                const date = new Date(startDate);
+                date.setDate(date.getDate() + i);
+                dates.push(date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }));
+                
+                // Generate realistic data based on the chart paths
+                totalSales.push(500 + Math.random() * 1500 + (i * 30));
+                campaignSales.push(200 + Math.random() * 800 + (i * 20));
+            }
+            
+            chartOverlay.addEventListener('mousemove', function(e) {
+                const rect = chartOverlay.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const percent = (x / rect.width) * 100;
+                
+                // Calculate data index
+                const dataIndex = Math.floor((x / rect.width) * 29);
+                
+                // Position hover line
+                hoverLine.style.left = percent + '%';
+                hoverLine.style.opacity = '1';
+                
+                // Position tooltip
+                tooltip.style.left = Math.min(Math.max(x, 80), rect.width - 80) + 'px';
+                tooltip.style.opacity = '1';
+                
+                // Update tooltip content
+                const tooltipDate = tooltip.querySelector('.tooltip-date');
+                const totalValue = tooltip.querySelector('.tooltip-item:nth-child(2) .tooltip-value');
+                const campaignValue = tooltip.querySelector('.tooltip-item:nth-child(3) .tooltip-value');
+                
+                tooltipDate.textContent = dates[dataIndex];
+                totalValue.textContent = '$' + totalSales[dataIndex].toFixed(2);
+                campaignValue.textContent = '$' + campaignSales[dataIndex].toFixed(2);
+                
+                // Calculate Y positions based on the SVG paths
+                const totalY = 75 - (percent * 0.57); // Approximate from path data
+                const campaignY = 82 - (percent * 0.24);
+                
+                purpleDot.style.left = percent + '%';
+                purpleDot.style.top = totalY + '%';
+                purpleDot.style.opacity = '1';
+                
+                tealDot.style.left = percent + '%';
+                tealDot.style.top = campaignY + '%';
+                tealDot.style.opacity = '1';
+            });
+            
+            chartOverlay.addEventListener('mouseleave', function() {
+                hoverLine.style.opacity = '0';
+                tooltip.style.opacity = '0';
+                purpleDot.style.opacity = '0';
+                tealDot.style.opacity = '0';
+            });
+        });
+    </script>
+</body>
+</html>
+
