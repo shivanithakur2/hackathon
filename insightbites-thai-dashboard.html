@@ -159,6 +159,61 @@
         .nav-menu-item.selected img {
             filter: brightness(0) saturate(100%) invert(11%) sepia(97%) saturate(7478%) hue-rotate(10deg) brightness(92%) contrast(108%);
         }
+        
+        .nav-menu-item.expandable {
+            position: relative;
+        }
+        
+        .nav-menu-item .nav-chevron {
+            width: 16px;
+            height: 16px;
+            margin-left: auto;
+            transition: transform 0.2s;
+            filter: brightness(0) saturate(100%) invert(35%) sepia(0%) saturate(0%) hue-rotate(0deg);
+        }
+        
+        .nav-menu-item.selected .nav-chevron {
+            filter: brightness(0) saturate(100%) invert(11%) sepia(97%) saturate(7478%) hue-rotate(10deg) brightness(92%) contrast(108%);
+        }
+        
+        .nav-menu-item.expanded .nav-chevron {
+            transform: rotate(180deg);
+        }
+        
+        .nav-submenu {
+            display: none;
+            flex-direction: column;
+            gap: 2px;
+            padding-left: 40px;
+            margin-top: 4px;
+            margin-bottom: 4px;
+        }
+        
+        .nav-submenu.show {
+            display: flex;
+        }
+        
+        .nav-submenu-item {
+            display: flex;
+            align-items: center;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 400;
+            color: #606060;
+            transition: background 0.2s;
+        }
+        
+        .nav-submenu-item:hover {
+            background: #F7F7F7;
+        }
+        
+        .nav-submenu-item.selected {
+            background: #FFE8E5;
+            color: #EB1700;
+            font-weight: 500;
+        }
 
         .nav-separator {
             height: 1px;
@@ -217,7 +272,7 @@
             flex: 1;
             display: flex;
             flex-direction: column;
-            background: #F7F7F7;
+            background: #FFFFFF;
         }
 
         /* Main Content */
@@ -253,10 +308,7 @@
         }
 
         .page-title-section {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 24px;
+            margin-bottom: 16px;
         }
 
         .page-title {
@@ -271,31 +323,99 @@
             font-size: 16px;
             color: #606060;
             line-height: 1.375em;
+            max-width: 800px;
         }
 
-        .header-actions {
+        .filter-bar {
             display: flex;
             gap: 12px;
+            margin-bottom: 0;
+            flex-wrap: wrap;
         }
 
         .filter-button {
             display: flex;
             align-items: center;
             gap: 4px;
-            padding: 2px 12px;
+            padding: 8px 16px;
             height: 40px;
-            border: 1px solid #D6D6D6;
-            border-radius: 9999px;
-            background: white;
+            border: none;
+            border-radius: 8px;
+            background: #F7F7F7;
             font-size: 14px;
-            font-weight: 700;
+            font-weight: 500;
+            color: #191919;
             cursor: pointer;
             white-space: nowrap;
             transition: all 0.2s;
         }
 
         .filter-button:hover {
-            background: #F7F7F7;
+            background: #E7E7E7;
+        }
+        
+        .page-divider {
+            width: calc(100vw - 280px);
+            height: 1px;
+            background: #E7E7E7;
+            margin-top: 24px;
+            margin-bottom: 0;
+            margin-left: -64px;
+            position: relative;
+        }
+        
+        /* Benchmark Peer Set Banner */
+        .benchmark-banner {
+            background: white;
+            border: 1px solid #E7E7E7;
+            border-radius: 8px;
+            padding: 20px 28px;
+            margin-top: 32px;
+            margin-bottom: 0;
+            display: flex;
+            align-items: center;
+            gap: 32px;
+        }
+        
+        .benchmark-block {
+            flex: 1;
+            display: flex;
+            gap: 14px;
+            align-items: center;
+        }
+        
+        .benchmark-icon {
+            font-size: 32px;
+            line-height: 1;
+            flex-shrink: 0;
+        }
+        
+        .benchmark-content {
+            flex: 1;
+        }
+        
+        .benchmark-label {
+            font-size: 15px;
+            font-weight: 700;
+            color: #191919;
+            margin-bottom: 4px;
+            letter-spacing: 0;
+            line-height: 1.3;
+        }
+        
+        .benchmark-description {
+            font-size: 13px;
+            color: #606060;
+            line-height: 1.5;
+            font-weight: 400;
+        }
+        
+        .benchmark-divider {
+            display: block;
+            width: 1px;
+            height: 60px;
+            background: #E7E7E7;
+            flex-shrink: 0;
         }
 
         /* Goal Banner */
@@ -352,11 +472,25 @@
 
         .section-header {
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             gap: 12px;
             margin-bottom: 24px;
             padding-bottom: 16px;
             border-bottom: 1px solid #E7E7E7;
+        }
+        
+        .section-header-text {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        
+        .section-header-text .section-subheader {
+            margin: 0;
+            font-size: 14px;
+            color: #767676;
+            line-height: 1.5;
         }
 
         .section-icon {
@@ -370,6 +504,155 @@
             font-weight: 700;
             color: #191919;
             line-height: 1.1666em;
+        }
+
+        .section-subheader {
+            font-size: 14px;
+            color: #606060;
+            line-height: 1.5;
+            margin: 12px 0 24px 0;
+        }
+
+        .chart-period-label {
+            font-size: 12px;
+            color: #9CA3AF;
+            margin: 4px 0 2px 0;
+        }
+
+        /* Main Charts Grid (Side by Side) */
+        .main-charts-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            padding-top: 72px;
+            padding-bottom: 72px;
+            width: 100%;
+        }
+        
+        .main-charts-grid .section-card {
+            max-height: 536px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .main-charts-grid .section-header {
+            margin-bottom: 4px;
+        }
+        
+        .main-charts-grid .section-header-text .section-subheader {
+            font-size: 14px;
+            margin: 0;
+            line-height: 1.4;
+        }
+
+        .chart-container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 0;
+            overflow: hidden;
+            padding: 8px 0;
+        }
+        
+        .chart-container canvas {
+            max-height: 280px !important;
+        }
+
+        .chart-legend-custom {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            padding-top: 12px;
+            margin-top: 8px;
+            border-top: 1px solid #E7E7E7;
+            flex-shrink: 0;
+        }
+
+        .legend-item-custom {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            color: #191919;
+            font-weight: 500;
+        }
+
+        .legend-bar {
+            width: 16px;
+            height: 16px;
+            border-radius: 3px;
+        }
+
+        .legend-bar.your-performance {
+            background: #7C3AED;
+        }
+
+        .legend-bar.market-avg {
+            background: #D1D5DB;
+        }
+
+        .opportunity-indicator {
+            font-size: 18px;
+        }
+
+        /* Scatter Chart Inline */
+        .scatter-chart-container-inline {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 0;
+            overflow: hidden;
+            padding: 8px 0;
+        }
+        
+        .scatter-chart-container-inline canvas {
+            max-height: 280px !important;
+        }
+
+        .quadrant-legend-inline {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            padding-top: 12px;
+            margin-top: 8px;
+            border-top: 1px solid #E7E7E7;
+            flex-shrink: 0;
+            flex-wrap: wrap;
+        }
+
+        .quadrant-item-inline {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: #191919;
+            font-weight: 500;
+        }
+
+        .quadrant-color {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .quadrant-color.undervalued {
+            background: #10B981;
+        }
+
+        .quadrant-color.healthy {
+            background: #7C3AED;
+        }
+
+        .quadrant-color.overpriced {
+            background: #EF4444;
+        }
+
+        .quadrant-color.low-profit {
+            background: #F59E0B;
         }
 
         /* Insight Cards */
@@ -574,6 +857,46 @@
             color: #191919;
         }
 
+        .tooltip-trigger {
+            position: relative;
+            cursor: help;
+            border-bottom: 1px dotted #767676;
+        }
+
+        .tooltip-text {
+            visibility: hidden;
+            opacity: 0;
+            position: absolute;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #191919;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            white-space: nowrap;
+            z-index: 100;
+            transition: opacity 0.2s ease;
+            pointer-events: none;
+        }
+
+        .tooltip-text::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 5px solid transparent;
+            border-top-color: #191919;
+        }
+
+        .tooltip-trigger:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+
         .pricing-action {
             display: flex;
             align-items: center;
@@ -588,6 +911,39 @@
             font-size: 13px;
             color: #191919;
             line-height: 1.4;
+        }
+
+        .action-btn {
+            padding: 10px 20px;
+            height: 40px;
+            border: none;
+            border-radius: 9999px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .action-btn.primary {
+            background: #191919;
+            color: white;
+        }
+
+        .action-btn.primary:hover {
+            background: #000000;
+            transform: translateY(-1px);
+        }
+
+        .action-btn.secondary {
+            background: white;
+            color: #191919;
+            border: 2px solid #191919;
+        }
+
+        .action-btn.secondary:hover {
+            background: #F7F7F7;
+            transform: translateY(-1px);
         }
 
         .test-btn {
@@ -646,6 +1002,346 @@
             font-weight: 700;
         }
 
+        /* Heatmap Section - Bottom */
+        .heatmap-section-bottom {
+            margin-bottom: 24px;
+        }
+
+        .heatmap-full-container {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr;
+            gap: 24px;
+        }
+
+        .heatmap-left {
+            background: white;
+            border: 1px solid #E7E7E7;
+            border-radius: 12px;
+            padding: 32px;
+        }
+
+        .heatmap-header-bottom {
+            margin-bottom: 24px;
+        }
+
+        .location-breadcrumb {
+            font-size: 14px;
+            color: #606060;
+            margin-bottom: 16px;
+        }
+
+        .location-breadcrumb span {
+            text-decoration: underline;
+            cursor: pointer;
+        }
+
+        .location-breadcrumb .breadcrumb-current {
+            font-weight: 700;
+            color: #191919;
+        }
+
+        .location-breadcrumb .breadcrumb-sep {
+            margin: 0 8px;
+            text-decoration: none;
+            cursor: default;
+        }
+
+        .heatmap-title-bottom {
+            font-size: 20px;
+            font-weight: 700;
+            color: #191919;
+            margin-bottom: 8px;
+        }
+
+        .heatmap-subtitle-bottom {
+            font-size: 13px;
+            color: #606060;
+            line-height: 1.5;
+        }
+
+        .heatmap-canvas-large {
+            position: relative;
+            min-height: 500px;
+        }
+
+        .heatmap-svg-large {
+            width: 100%;
+            height: auto;
+            border-radius: 12px;
+            border: 1px solid #E7E7E7;
+        }
+
+        .map-controls {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 1px;
+            background: white;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            z-index: 10;
+        }
+
+        .map-control-btn {
+            width: 40px;
+            height: 40px;
+            border: none;
+            background: white;
+            font-size: 20px;
+            font-weight: 300;
+            color: #606060;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .map-control-btn:first-child {
+            border-radius: 4px 4px 0 0;
+            border-bottom: 1px solid #E7E7E7;
+        }
+
+        .map-control-btn:last-child {
+            border-radius: 0 0 4px 4px;
+        }
+
+        .map-control-btn:hover {
+            background: #F7F7F7;
+            color: #191919;
+        }
+
+        .hex-tile {
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .hex-tile:hover {
+            opacity: 1 !important;
+            stroke-width: 3;
+            stroke: #191919;
+            transform-origin: center;
+            filter: brightness(1.1);
+        }
+
+        .hex-tile.your-location {
+            animation: pulse-location 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse-location {
+            0%, 100% {
+                stroke-width: 3;
+            }
+            50% {
+                stroke-width: 4;
+            }
+        }
+
+        .restaurant-marker {
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .restaurant-marker:hover {
+            opacity: 1 !important;
+            transform: scale(1.15);
+            transform-origin: center;
+        }
+
+        .heatmap-legend-large {
+            margin-top: 20px;
+            background: white;
+            border: 1px solid #E7E7E7;
+            border-radius: 8px;
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .legend-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: #191919;
+            margin-bottom: 0;
+        }
+
+        .legend-items {
+            display: flex;
+            flex-direction: row;
+            gap: 24px;
+            margin-bottom: 0;
+            flex-wrap: wrap;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 13px;
+            color: #191919;
+        }
+
+        .legend-color {
+            width: 24px;
+            height: 14px;
+            border-radius: 3px;
+        }
+
+        .legend-color.hot-zone {
+            background: linear-gradient(90deg, #E53E3E 0%, #C53030 100%);
+        }
+
+        .legend-color.warm-zone {
+            background: linear-gradient(90deg, #FC8181 0%, #FEB2B2 100%);
+        }
+
+        .legend-color.medium-zone {
+            background: linear-gradient(90deg, #B794F4 0%, #D6BCFA 100%);
+        }
+
+        .legend-color.cool-zone {
+            background: linear-gradient(90deg, #4299E1 0%, #63B3ED 100%);
+        }
+
+        .legend-note {
+            font-size: 12px;
+            color: #606060;
+            margin-left: 24px;
+            padding-left: 24px;
+            border-left: 1px solid #E7E7E7;
+        }
+
+        .heatmap-right {
+            background: white;
+            border: 1px solid #E7E7E7;
+            border-radius: 12px;
+            padding: 32px;
+        }
+
+        .zone-detail-panel {
+            position: sticky;
+            top: 100px;
+        }
+
+        .zone-detail-header {
+            font-size: 20px;
+            font-weight: 700;
+            color: #191919;
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid #E7E7E7;
+        }
+
+        .zone-detail-content {
+            min-height: 400px;
+        }
+
+        .zone-placeholder {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 60px 20px;
+            color: #767676;
+        }
+
+        .zone-placeholder p {
+            margin-top: 16px;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .zone-info {
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .zone-metric {
+            margin-bottom: 24px;
+        }
+
+        .zone-metric-label {
+            font-size: 12px;
+            color: #767676;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+            font-weight: 600;
+        }
+
+        .zone-metric-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: #191919;
+        }
+
+        .zone-stat-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #F7F7F7;
+        }
+
+        .zone-stat-row:last-child {
+            border-bottom: none;
+        }
+
+        .zone-stat-label {
+            font-size: 14px;
+            color: #606060;
+            font-weight: 500;
+        }
+
+        .zone-stat-value {
+            font-size: 16px;
+            font-weight: 700;
+            color: #191919;
+        }
+
+        .zone-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 9999px;
+            font-size: 12px;
+            font-weight: 700;
+            margin-top: 8px;
+        }
+
+        .zone-badge.very-high {
+            background: #FEE2E2;
+            color: #DC2626;
+        }
+
+        .zone-badge.high {
+            background: #FEF3C7;
+            color: #F59E0B;
+        }
+
+        .zone-badge.medium {
+            background: #DBEAFE;
+            color: #3B82F6;
+        }
+
+        .zone-badge.low {
+            background: #F7F7F7;
+            color: #606060;
+        }
+
         /* Responsive */
         @media (max-width: 1024px) {
             .main-grid {
@@ -666,9 +1362,42 @@
                 padding: 24px 20px;
             }
 
-            .page-title-section {
+            .filter-bar {
+                gap: 8px;
+            }
+            
+            .page-divider {
+                margin-left: -20px;
+                width: 100vw;
+            }
+            
+            .benchmark-banner {
                 flex-direction: column;
-                gap: 16px;
+                padding: 20px;
+                gap: 20px;
+            }
+            
+            .benchmark-block {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            
+            .benchmark-divider {
+                width: 100%;
+                height: 1px;
+            }
+            
+            .benchmark-icon {
+                font-size: 28px;
+            }
+            
+            .benchmark-label {
+                font-size: 14px;
+            }
+            
+            .benchmark-description {
+                font-size: 13px;
             }
 
             .pricing-details {
@@ -677,6 +1406,15 @@
 
             .pricing-action {
                 flex-direction: column;
+            }
+
+            .heatmap-full-container {
+                grid-template-columns: 1fr;
+            }
+
+            .heatmap-legend-large {
+                position: static;
+                margin-top: 16px;
             }
         }
     </style>
@@ -708,9 +1446,19 @@
                     <span>Home</span>
                 </div>
                 
-                <div class="nav-menu-item selected">
+                <div class="nav-menu-item expandable expanded">
                     <img src="icons/insight-line-24.svg" alt="" width="24" height="24">
-                    <span>InsightBites</span>
+                    <span>Insights</span>
+                    <img src="icons/chevron-down-16.svg" alt="" class="nav-chevron">
+                </div>
+                
+                <div class="nav-submenu show">
+                    <div class="nav-submenu-item">Optimization score</div>
+                    <div class="nav-submenu-item">Sales</div>
+                    <div class="nav-submenu-item selected">Benchmarks</div>
+                    <div class="nav-submenu-item">Product mix</div>
+                    <div class="nav-submenu-item">Operations quality</div>
+                    <div class="nav-submenu-item">Most Loved</div>
                 </div>
                 
                 <div class="nav-menu-item">
@@ -773,30 +1521,108 @@
             <!-- Page Header -->
             <div class="page-header">
                 <div class="breadcrumbs">
-                    <a href="#" class="breadcrumb-link">InsightBites</a>
+                    <a href="#" class="breadcrumb-link">Insights</a>
                     <span class="breadcrumb-separator">/</span>
-                    <span class="breadcrumb-link">Dashboard</span>
+                    <span class="breadcrumb-link">Benchmarks</span>
                 </div>
 
                 <div class="page-title-section">
                     <div>
-                        <h1 class="page-title">Local Market Insights</h1>
-                        <p class="page-subtitle">Identify demand shifts, cuisine gaps, and actionable menu innovations</p>
+                        <h1 class="page-title">Local market insights</h1>
+                        <p class="page-subtitle">Discover what's trending in your neighborhood and how your menu compares to nearby restaurants. Get easy, data-backed ideas to stay competitive and grow your sales.</p>
                     </div>
-                    <div class="header-actions">
-                        <button class="filter-button">Last 30 days ▼</button>
-                        <button class="filter-button">3 miles radius ▼</button>
+                </div>
+                
+                <!-- Filter Bar -->
+                <div class="filter-bar">
+                    <button class="filter-button">Last 30 days ▼</button>
+                    <button class="filter-button">3 miles radius ▼</button>
+                </div>
+            </div>
+            
+            <!-- Divider -->
+            <div class="page-divider"></div>
+            
+            <!-- Benchmark Peer Set Banner -->
+            <div class="benchmark-banner">
+                <div class="benchmark-block">
+                    <div class="benchmark-icon">📍</div>
+                    <div class="benchmark-content">
+                        <div class="benchmark-label">Better visibility</div>
+                        <div class="benchmark-description">Compare your performance to 18 Thai & Asian fusion restaurants within a 3-mile radius tracking local demand, comparing item prices and menu trends from the past 30 days.</div>
+                    </div>
+                </div>
+                <div class="benchmark-divider"></div>
+                <div class="benchmark-block">
+                    <div class="benchmark-icon">🔒</div>
+                    <div class="benchmark-content">
+                        <div class="benchmark-label">Privacy first</div>
+                        <div class="benchmark-description">All insights are based on anonymized, aggregated data from the past 30 days. No individual restaurant information is shown.</div>
                     </div>
                 </div>
             </div>
 
-            <!-- Goal Banner -->
-            <div class="goal-banner">
-                <img src="icons/info-circle-24.svg" alt="" class="goal-banner-icon">
-                <div class="goal-banner-content">
-                    <div class="goal-banner-title">Your Dashboard Goal</div>
-                    <div class="goal-banner-text">
-                        Quick insights to help you spot local trends and make data-driven menu decisions with confidence.
+            <!-- Main Charts Grid (Side by Side) -->
+            <div class="main-charts-grid">
+                <!-- Performance Comparison Chart -->
+                <div class="section-card">
+                    <div class="section-header">
+                        <img src="icons/insight-line-24.svg" alt="" class="section-icon">
+                        <div class="section-header-text">
+                            <div class="section-title">Your performance vs. local market</div>
+                            <p class="section-subheader">See how your menu categories compare to local demand trends and identify opportunities.</p>
+                        </div>
+                    </div>
+                    <p class="chart-period-label">Last 7 days (Oct 9 - Oct 15, 2025) vs. market average</p>
+                    
+                    <div class="chart-container">
+                        <canvas id="performanceChart" width="450" height="280"></canvas>
+                    </div>
+                    
+                    <div class="chart-legend-custom">
+                        <div class="legend-item-custom">
+                            <div class="legend-bar your-performance"></div>
+                            <span>Your performance</span>
+                        </div>
+                        <div class="legend-item-custom">
+                            <div class="legend-bar market-avg"></div>
+                            <span>Local market average</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pricing Position Scatter Chart -->
+                <div class="section-card">
+                    <div class="section-header">
+                        <img src="icons/money-circle-enabled-line-24.svg" alt="" class="section-icon">
+                        <div class="section-header-text">
+                            <div class="section-title">Price competitiveness vs. profitability</div>
+                            <p class="section-subheader">See where each menu item sits in terms of pricing and margins.</p>
+                        </div>
+                    </div>
+                    <p class="chart-period-label">Current menu pricing analysis</p>
+                    
+                    <div class="scatter-chart-container-inline">
+                        <canvas id="pricingScatterChart" width="450" height="280"></canvas>
+                    </div>
+                    
+                    <div class="quadrant-legend-inline">
+                        <div class="quadrant-item-inline">
+                            <div class="quadrant-color undervalued"></div>
+                            <span>Undervalued</span>
+                        </div>
+                        <div class="quadrant-item-inline">
+                            <div class="quadrant-color healthy"></div>
+                            <span>Healthy zone</span>
+                        </div>
+                        <div class="quadrant-item-inline">
+                            <div class="quadrant-color overpriced"></div>
+                            <span>Overpriced</span>
+                        </div>
+                        <div class="quadrant-item-inline">
+                            <div class="quadrant-color low-profit"></div>
+                            <span>Low profit</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -807,7 +1633,10 @@
                 <div class="section-card">
                     <div class="section-header">
                         <img src="icons/insight-line-24.svg" alt="" class="section-icon">
-                        <div class="section-title">Local Trends</div>
+                        <div class="section-header-text">
+                            <div class="section-title">Local trends</div>
+                            <p class="section-subheader">See what's trending in your neighborhood and get quick menu ideas to boost sales.</p>
+                        </div>
                     </div>
 
                     <div class="insights-container">
@@ -817,7 +1646,6 @@
                                 <div class="insight-type">
                                     🌟 Seasonal Trend
                                 </div>
-                                <div class="insight-metric">+40%</div>
                             </div>
                             <div class="insight-title">Mango Sticky Rice orders surge in May–July</div>
                             <div class="insight-description">
@@ -838,7 +1666,6 @@
                                 <div class="insight-type">
                                     💰 High-Margin Add-On
                                 </div>
-                                <div class="insight-metric">+6%</div>
                             </div>
                             <div class="insight-title">Expand beverage menu with Thai Tea & Coconut Water</div>
                             <div class="insight-description">
@@ -859,7 +1686,6 @@
                                 <div class="insight-type">
                                     🎁 Bundling Opportunity
                                 </div>
-                                <div class="insight-metric">+10%</div>
                             </div>
                             <div class="insight-title">Offer 'Pad Thai Combo' (entrée + spring rolls + Thai tea)</div>
                             <div class="insight-description">
@@ -880,7 +1706,10 @@
                 <div class="section-card">
                     <div class="section-header">
                         <img src="icons/money-circle-enabled-line-24.svg" alt="" class="section-icon">
-                        <div class="section-title">Pricing & Margins</div>
+                        <div class="section-header-text">
+                            <div class="section-title">Pricing & margins</div>
+                            <p class="section-subheader">Compare your prices with nearby restaurants and see where you can improve profitability.</p>
+                        </div>
                     </div>
 
                     <div class="pricing-rows">
@@ -888,15 +1717,15 @@
                         <div class="pricing-card">
                             <div class="pricing-header">
                                 <div class="dish-name">Thai Iced Coffee</div>
-                                <div class="margin-badge">High Margin 72%</div>
+                                <div class="margin-badge">High margin 72%</div>
                             </div>
                             <div class="pricing-details">
                                 <div class="pricing-detail">
-                                    <div class="detail-label">Suggested Price</div>
+                                    <div class="detail-label">Suggested price</div>
                                     <div class="detail-value">$5.00</div>
                                 </div>
                                 <div class="pricing-detail">
-                                    <div class="detail-label">Market Avg</div>
+                                    <div class="detail-label">Market avg</div>
                                     <div class="detail-value">$4.85</div>
                                 </div>
                                 <div class="pricing-detail">
@@ -906,9 +1735,9 @@
                             </div>
                             <div class="pricing-action">
                                 <div class="recommendation">
-                                    💡 Price at $5.00 (in line with peers) — +3% new customer attraction
+                                    💡 Your price is right where it should be — staying at $5.00 keeps you competitive and attracts more new customers.
                                 </div>
-                                <button class="test-btn">Add Item</button>
+                                <button class="test-btn">Keep at $5.00</button>
                             </div>
                         </div>
 
@@ -916,15 +1745,15 @@
                         <div class="pricing-card">
                             <div class="pricing-header">
                                 <div class="dish-name">Coconut Water</div>
-                                <div class="margin-badge">High Margin 68%</div>
+                                <div class="margin-badge">High margin 68%</div>
                             </div>
                             <div class="pricing-details">
                                 <div class="pricing-detail">
-                                    <div class="detail-label">Suggested Price</div>
+                                    <div class="detail-label">Suggested price</div>
                                     <div class="detail-value">$4.50</div>
                                 </div>
                                 <div class="pricing-detail">
-                                    <div class="detail-label">Market Avg</div>
+                                    <div class="detail-label">Market avg</div>
                                     <div class="detail-value">$4.25</div>
                                 </div>
                                 <div class="pricing-detail">
@@ -936,35 +1765,35 @@
                                 <div class="recommendation">
                                     💡 Premium positioning — healthy option attracts new demographics
                                 </div>
-                                <button class="test-btn">Add Item</button>
+                                <button class="test-btn">Add item</button>
                             </div>
                         </div>
 
-                        <!-- Pad Thai Combo -->
+                        <!-- Green Curry -->
                         <div class="pricing-card">
                             <div class="pricing-header">
-                                <div class="dish-name">Pad Thai Combo</div>
-                                <div class="margin-badge medium">Medium Margin 45%</div>
+                                <div class="dish-name">Green Curry</div>
+                                <div class="margin-badge medium">Medium margin 58%</div>
                             </div>
                             <div class="pricing-details">
                                 <div class="pricing-detail">
-                                    <div class="detail-label">Bundle Price</div>
-                                    <div class="detail-value">$18.95</div>
+                                    <div class="detail-label">Current price</div>
+                                    <div class="detail-value">$13.99</div>
                                 </div>
                                 <div class="pricing-detail">
-                                    <div class="detail-label">Standalone Total</div>
-                                    <div class="detail-value">$21.50</div>
+                                    <div class="detail-label">Suggested price</div>
+                                    <div class="detail-value">$14.99</div>
                                 </div>
                                 <div class="pricing-detail">
-                                    <div class="detail-label">Savings</div>
-                                    <div class="detail-value">$2.55</div>
+                                    <div class="detail-label">Cost</div>
+                                    <div class="detail-value">$5.88</div>
                                 </div>
                             </div>
                             <div class="pricing-action">
                                 <div class="recommendation">
-                                    💡 12% discount drives +10% volume — net revenue positive
+                                    💡 Raise to $14.99 to align with competitors — likely minimal order impact
                                 </div>
-                                <button class="test-btn">Create Bundle</button>
+                                <button class="test-btn">Update price</button>
                             </div>
                         </div>
                     </div>
@@ -984,7 +1813,315 @@
         </div>
     </div>
 
+    <!-- Chart.js Library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
     <script>
+        // Performance Comparison Chart
+        const performanceCtx = document.getElementById('performanceChart');
+        if (performanceCtx) {
+            new Chart(performanceCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Pad Thai', 'Curries', 'Noodles', 'Appetizers', 'Desserts', 'Drinks'],
+                    datasets: [
+                        {
+                            label: 'Your performance',
+                            type: 'bar',
+                            data: [85, 52, 78, 68, 35, 42],
+                            backgroundColor: '#7C3AED',
+                            borderRadius: 4,
+                            barPercentage: 0.7,
+                            categoryPercentage: 0.8,
+                            order: 2
+                        },
+                        {
+                            label: 'Local market average',
+                            type: 'bar',
+                            data: [82, 75, 72, 65, 70, 65],
+                            backgroundColor: '#D1D5DB',
+                            borderRadius: 4,
+                            barPercentage: 0.7,
+                            categoryPercentage: 0.8,
+                            order: 3
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: {
+                        mode: 'index',
+                        intersect: false
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            backgroundColor: '#FFFFFF',
+                            titleColor: '#191919',
+                            bodyColor: '#191919',
+                            padding: 12,
+                            borderColor: '#E7E7E7',
+                            borderWidth: 1,
+                            cornerRadius: 8,
+                            displayColors: true,
+                            boxPadding: 6,
+                            shadowOffsetX: 0,
+                            shadowOffsetY: 2,
+                            shadowBlur: 8,
+                            shadowColor: 'rgba(0, 0, 0, 0.1)',
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    label += context.parsed.y + ' orders/week';
+                                    
+                                    // Add percentage comparison for your performance bars
+                                    if (context.datasetIndex === 0) {
+                                        const yourValue = context.parsed.y;
+                                        const marketValue = context.chart.data.datasets[1].data[context.dataIndex];
+                                        const diff = yourValue - marketValue;
+                                        const percentage = ((diff / marketValue) * 100).toFixed(0);
+                                        
+                                        if (diff < 0) {
+                                            label += ` (${Math.abs(percentage)}% below market)`;
+                                        } else if (diff > 0) {
+                                            label += ` (+${percentage}% above market)`;
+                                        }
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            ticks: {
+                                font: {
+                                    family: 'TT Norms, -apple-system, sans-serif',
+                                    size: 12
+                                },
+                                color: '#9CA3AF',
+                                callback: function(value) {
+                                    return '$' + (value / 10) + 'K';
+                                }
+                            },
+                            grid: {
+                                color: '#F3F4F6',
+                                drawBorder: false
+                            },
+                            border: {
+                                display: false
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                font: {
+                                    family: 'TT Norms, -apple-system, sans-serif',
+                                    size: 13,
+                                    weight: 500
+                                },
+                                color: '#374151'
+                            },
+                            grid: {
+                                display: false
+                            },
+                            border: {
+                                display: false
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Pricing Position Scatter Chart
+        const scatterCtx = document.getElementById('pricingScatterChart');
+        if (scatterCtx) {
+            // Menu items data: [% price vs market, margin %, item name, market avg, predicted impact]
+            const menuItems = [
+                { x: 23, y: 42, label: 'Pad Thai', marketAvg: '$11.20', margin: 42, impact: 'Lower by $1 → +12% volume' },
+                { x: 3, y: 72, label: 'Thai Iced Coffee', marketAvg: '$4.85', margin: 72, impact: 'Raise by $0.50 → +8% revenue' },
+                { x: 6, y: 68, label: 'Coconut Water', marketAvg: '$4.25', margin: 68, impact: 'Hold at $4.50 → stable' },
+                { x: -10, y: 58, label: 'Green Curry', marketAvg: '$14.99', margin: 58, impact: 'Raise to $14.99 → +6% revenue' },
+                { x: -5, y: 65, label: 'Spring Rolls', marketAvg: '$7.25', margin: 65, impact: 'Hold → healthy zone' },
+                { x: 15, y: 38, label: 'Tom Yum Soup', marketAvg: '$8.95', margin: 38, impact: 'Lower by $0.75 → +10% volume' },
+                { x: -12, y: 75, label: 'Thai Tea', marketAvg: '$5.50', margin: 75, impact: 'Raise by $0.75 → +10% revenue' },
+                { x: 8, y: 52, label: 'Mango Sticky Rice', marketAvg: '$7.50', margin: 52, impact: 'Hold or test +$0.50' }
+            ];
+
+            // Determine color based on quadrant
+            const getPointColor = (x, y) => {
+                if (x < 0 && y >= 60) return '#10B981'; // Undervalued (green)
+                if (x >= 0 && y >= 60) return '#7C3AED'; // Healthy (purple)
+                if (x >= 0 && y < 60) return '#EF4444';  // Overpriced (red)
+                return '#F59E0B'; // Low profit (orange)
+            };
+
+            const scatterData = menuItems.map(item => ({
+                x: item.x,
+                y: item.y,
+                label: item.label,
+                marketAvg: item.marketAvg,
+                margin: item.margin,
+                impact: item.impact,
+                backgroundColor: getPointColor(item.x, item.y),
+                borderColor: getPointColor(item.x, item.y),
+                borderWidth: 2,
+                pointRadius: 8,
+                pointHoverRadius: 12
+            }));
+
+            new Chart(scatterCtx, {
+                type: 'scatter',
+                data: {
+                    datasets: [{
+                        label: 'Menu Items',
+                        data: scatterData,
+                        backgroundColor: scatterData.map(d => d.backgroundColor),
+                        borderColor: scatterData.map(d => d.borderColor),
+                        borderWidth: 2,
+                        pointRadius: 8,
+                        pointHoverRadius: 12
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            backgroundColor: '#FFFFFF',
+                            titleColor: '#191919',
+                            bodyColor: '#191919',
+                            padding: 16,
+                            borderColor: '#E7E7E7',
+                            borderWidth: 1,
+                            cornerRadius: 8,
+                            displayColors: false,
+                            callbacks: {
+                                title: function(context) {
+                                    return context[0].raw.label;
+                                },
+                                label: function(context) {
+                                    return null;
+                                },
+                                afterLabel: function(context) {
+                                    const data = context.raw;
+                                    return [
+                                        `Market avg: ${data.marketAvg}`,
+                                        `Margin: ${data.margin}%`,
+                                        `Price vs. market: ${data.x > 0 ? '+' : ''}${data.x}%`,
+                                        '',
+                                        `💡 ${data.impact}`
+                                    ];
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Price vs. market avg (%)',
+                                font: {
+                                    family: 'TT Norms, -apple-system, sans-serif',
+                                    size: 13,
+                                    weight: 600
+                                },
+                                color: '#191919'
+                            },
+                            min: -20,
+                            max: 30,
+                            ticks: {
+                                font: {
+                                    family: 'TT Norms, -apple-system, sans-serif',
+                                    size: 12
+                                },
+                                color: '#767676',
+                                callback: function(value) {
+                                    return (value > 0 ? '+' : '') + value + '%';
+                                }
+                            },
+                            grid: {
+                                color: '#E7E7E7',
+                                drawBorder: false
+                            },
+                            border: {
+                                display: false
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Profit margin (%)',
+                                font: {
+                                    family: 'TT Norms, -apple-system, sans-serif',
+                                    size: 13,
+                                    weight: 600
+                                },
+                                color: '#191919'
+                            },
+                            min: 30,
+                            max: 80,
+                            ticks: {
+                                font: {
+                                    family: 'TT Norms, -apple-system, sans-serif',
+                                    size: 12
+                                },
+                                color: '#767676',
+                                callback: function(value) {
+                                    return value + '%';
+                                }
+                            },
+                            grid: {
+                                color: '#E7E7E7',
+                                drawBorder: false
+                            },
+                            border: {
+                                display: false
+                            }
+                        }
+                    }
+                },
+                plugins: [{
+                    id: 'quadrantLines',
+                    beforeDraw: (chart) => {
+                        const ctx = chart.ctx;
+                        const xAxis = chart.scales.x;
+                        const yAxis = chart.scales.y;
+                        
+                        // Draw vertical line at x=0 (market average)
+                        ctx.save();
+                        ctx.beginPath();
+                        ctx.strokeStyle = '#9CA3AF';
+                        ctx.lineWidth = 1;
+                        ctx.setLineDash([5, 5]);
+                        const x0 = xAxis.getPixelForValue(0);
+                        ctx.moveTo(x0, yAxis.top);
+                        ctx.lineTo(x0, yAxis.bottom);
+                        ctx.stroke();
+                        
+                        // Draw horizontal line at y=60 (good margin threshold)
+                        ctx.beginPath();
+                        const y60 = yAxis.getPixelForValue(60);
+                        ctx.moveTo(xAxis.left, y60);
+                        ctx.lineTo(xAxis.right, y60);
+                        ctx.stroke();
+                        ctx.restore();
+                    }
+                }]
+            });
+        }
+
         // Add button interaction
         document.querySelectorAll('.action-btn, .test-btn').forEach(button => {
             button.addEventListener('click', function() {
@@ -1003,13 +2140,209 @@
             });
         });
 
+        // Navigation submenu toggle
+        document.querySelectorAll('.nav-menu-item.expandable').forEach(item => {
+            item.addEventListener('click', function(e) {
+                e.preventDefault();
+                this.classList.toggle('expanded');
+                const submenu = this.nextElementSibling;
+                if (submenu && submenu.classList.contains('nav-submenu')) {
+                    submenu.classList.toggle('show');
+                }
+            });
+        });
+
         // Filter button interactions
         document.querySelectorAll('.filter-button').forEach(button => {
             button.addEventListener('click', function() {
-                this.style.background = '#F7F7F7';
+                this.style.background = '#E7E7E7';
                 setTimeout(() => {
-                    this.style.background = 'white';
+                    this.style.background = '#F7F7F7';
                 }, 200);
+            });
+        });
+
+        // Store marker interactivity
+        document.querySelectorAll('.your-store').forEach(storeMarker => {
+            storeMarker.style.cursor = 'pointer';
+            storeMarker.addEventListener('click', function(e) {
+                e.stopPropagation();
+                console.log('Store clicked:', this);
+                const storeName = this.getAttribute('data-name');
+                const detailContent = document.getElementById('zoneDetailContent');
+                
+                // Get store-specific data based on location
+                let orders, peakTime, topDishes, avgOrderValue, competitorCount;
+                
+                if (storeName.includes('Downtown')) {
+                    orders = '450';
+                    peakTime = 'Lunch (11 AM - 2 PM) & Dinner (6 PM - 9 PM)';
+                    topDishes = 'Pad Thai, Green Curry, Tom Yum Soup';
+                    avgOrderValue = '$32.50';
+                    competitorCount = '10-12 restaurants';
+                } else if (storeName.includes('Mission')) {
+                    orders = '385';
+                    peakTime = 'Lunch (12 PM - 2 PM) & Dinner (7 PM - 10 PM)';
+                    topDishes = 'Pad Thai, Mango Sticky Rice, Spring Rolls';
+                    avgOrderValue = '$30.20';
+                    competitorCount = '8-10 restaurants';
+                } else if (storeName.includes('Marina')) {
+                    orders = '320';
+                    peakTime = 'Dinner (6 PM - 9 PM) & Brunch (10 AM - 1 PM)';
+                    topDishes = 'Green Curry, Pad See Ew, Tom Kha';
+                    avgOrderValue = '$34.75';
+                    competitorCount = '6-8 restaurants';
+                }
+                
+                detailContent.innerHTML = `
+                    <div class="zone-info">
+                        <div style="text-align: center; margin-bottom: 16px; font-size: 32px;">📍</div>
+                        <div style="text-align: center; font-size: 18px; font-weight: 700; color: #191919; margin-bottom: 8px;">${storeName.replace(' (Your Store)', '')}</div>
+                        <div style="text-align: center; font-size: 13px; color: #606060; margin-bottom: 24px;">Your location</div>
+                        
+                        <div class="zone-metric">
+                            <div class="zone-metric-label">Daily orders</div>
+                            <div class="zone-metric-value">${orders}</div>
+                        </div>
+                        
+                        <div class="zone-stat-row">
+                            <div class="zone-stat-label">Peak hours</div>
+                            <div class="zone-stat-value" style="font-size: 14px; text-align: right;">${peakTime}</div>
+                        </div>
+                        
+                        <div class="zone-stat-row">
+                            <div class="zone-stat-label">Top dishes</div>
+                            <div class="zone-stat-value" style="font-size: 14px; text-align: right;">${topDishes}</div>
+                        </div>
+                        
+                        <div class="zone-stat-row">
+                            <div class="zone-stat-label">Competition nearby</div>
+                            <div class="zone-stat-value">${competitorCount}</div>
+                        </div>
+                        
+                        <div class="zone-stat-row">
+                            <div class="zone-stat-label">Avg order value</div>
+                            <div class="zone-stat-value">${avgOrderValue}</div>
+                        </div>
+                        
+                        <div style="margin-top: 24px; padding: 16px; background: #DBEAFE; border-radius: 8px; border-left: 3px solid #3B82F6;">
+                            <div style="font-size: 13px; font-weight: 700; color: #1E40AF; margin-bottom: 6px;">📊 Store performance</div>
+                            <div style="font-size: 13px; color: #191919; line-height: 1.5;">Your store is performing well in this zone. Click on surrounding hexagons to explore expansion opportunities.</div>
+                        </div>
+                    </div>
+                `;
+            });
+        });
+        
+        // Heatmap interactivity
+        document.querySelectorAll('.hex-tile').forEach(hexagon => {
+            hexagon.addEventListener('click', function() {
+                const zone = this.getAttribute('data-zone');
+                const orders = this.getAttribute('data-orders');
+                const isYourLocation = this.classList.contains('your-location');
+                
+                // Get zone details
+                let zoneName = '';
+                let zoneClass = '';
+                let peakTime = '';
+                let topDishes = '';
+                let opportunityIcon = '';
+                let opportunityTitle = '';
+                let opportunityText = '';
+                let opportunityBgColor = '';
+                let opportunityBorderColor = '';
+                let opportunityTextColor = '';
+                
+                switch(zone) {
+                    case 'very-high':
+                        zoneName = 'Very High Demand';
+                        zoneClass = 'very-high';
+                        peakTime = 'Lunch (11 AM - 2 PM) & Dinner (6 PM - 9 PM)';
+                        topDishes = 'Pad Thai, Green Curry, Tom Yum Soup';
+                        opportunityIcon = '⚡';
+                        opportunityTitle = 'Prime Market Opportunity';
+                        opportunityText = 'This zone has peak demand! Consider running limited-time offers during off-peak hours (3-5 PM) to capture additional volume and maximize kitchen efficiency.';
+                        opportunityBgColor = '#FEF3C7';
+                        opportunityBorderColor = '#F59E0B';
+                        opportunityTextColor = '#92400E';
+                        break;
+                    case 'high':
+                        zoneName = 'High Demand';
+                        zoneClass = 'high';
+                        peakTime = 'Lunch (12 PM - 2 PM) & Dinner (7 PM - 9 PM)';
+                        topDishes = 'Pad Thai, Mango Sticky Rice';
+                        opportunityIcon = '📈';
+                        opportunityTitle = 'Growth Opportunity';
+                        opportunityText = 'Strong demand area! Boost your presence with targeted ads during peak hours to capture more orders. Consider bundle deals to increase average order value.';
+                        opportunityBgColor = '#F0FDFA';
+                        opportunityBorderColor = '#00A896';
+                        opportunityTextColor = '#115E59';
+                        break;
+                    case 'medium':
+                        zoneName = 'Medium Demand';
+                        zoneClass = 'medium';
+                        peakTime = 'Dinner (6 PM - 8 PM)';
+                        topDishes = 'Pad Thai, Spring Rolls';
+                        opportunityIcon = '🎯';
+                        opportunityTitle = 'Expansion Opportunity';
+                        opportunityText = 'Emerging market with potential! Launch a first-order discount campaign (e.g., 20% off) to convert new customers in this zone into regulars.';
+                        opportunityBgColor = '#EEF2FF';
+                        opportunityBorderColor = '#6366F1';
+                        opportunityTextColor = '#3730A3';
+                        break;
+                    case 'low':
+                        zoneName = 'Low Demand';
+                        zoneClass = 'low';
+                        peakTime = 'Varies';
+                        topDishes = 'Mixed dishes';
+                        opportunityIcon = '💡';
+                        opportunityTitle = 'Test & Learn Opportunity';
+                        opportunityText = 'Lower competition zone! Perfect for testing new menu items or aggressive promotions. Experiment with $5 off campaigns to build awareness and trial.';
+                        opportunityBgColor = '#F3E8FF';
+                        opportunityBorderColor = '#A855F7';
+                        opportunityTextColor = '#6B21A8';
+                        break;
+                }
+                
+                // Update detail panel
+                const detailContent = document.getElementById('zoneDetailContent');
+                detailContent.innerHTML = `
+                    <div class="zone-info">
+                        ${isYourLocation ? '<div style="text-align: center; margin-bottom: 16px; font-size: 32px;">📍</div>' : ''}
+                        ${isYourLocation ? '<div style="text-align: center; font-size: 16px; font-weight: 700; color: #191919; margin-bottom: 24px;">Your location</div>' : ''}
+                        
+                        <div class="zone-metric">
+                            <div class="zone-metric-label">Daily orders</div>
+                            <div class="zone-metric-value">${orders}</div>
+                            <div class="zone-badge ${zoneClass}">${zoneName}</div>
+                        </div>
+                        
+                        <div class="zone-stat-row">
+                            <div class="zone-stat-label">Peak hours</div>
+                            <div class="zone-stat-value">${peakTime}</div>
+                        </div>
+                        
+                        <div class="zone-stat-row">
+                            <div class="zone-stat-label">Top dishes</div>
+                            <div class="zone-stat-value" style="font-size: 14px; text-align: right;">${topDishes}</div>
+                        </div>
+                        
+                        <div class="zone-stat-row">
+                            <div class="zone-stat-label">Competition</div>
+                            <div class="zone-stat-value">${zone === 'very-high' || zone === 'high' ? '8-12 restaurants' : zone === 'medium' ? '4-7 restaurants' : '1-3 restaurants'}</div>
+                        </div>
+                        
+                        <div class="zone-stat-row">
+                            <div class="zone-stat-label">Avg order value</div>
+                            <div class="zone-stat-value">${zone === 'very-high' ? '$32.50' : zone === 'high' ? '$28.75' : zone === 'medium' ? '$24.20' : '$19.50'}</div>
+                        </div>
+                        
+                        <div style="margin-top: 24px; padding: 16px; background: ${opportunityBgColor}; border-radius: 8px; border-left: 3px solid ${opportunityBorderColor};">
+                            <div style="font-size: 13px; font-weight: 700; color: ${opportunityTextColor}; margin-bottom: 6px;">${opportunityIcon} ${opportunityTitle}</div>
+                            <div style="font-size: 13px; color: #191919; line-height: 1.5;">${opportunityText}</div>
+                        </div>
+                    </div>
+                `;
             });
         });
     </script>
