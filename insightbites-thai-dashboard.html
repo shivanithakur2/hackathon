@@ -41,6 +41,7 @@
             background: #FFFFFF;
             color: #191919;
             display: flex;
+            overflow-x: hidden;
         }
 
         /* Left Navigation */
@@ -273,6 +274,8 @@
             display: flex;
             flex-direction: column;
             background: #FFFFFF;
+            overflow-x: hidden;
+            max-width: calc(100vw - 280px);
         }
 
         /* Main Content */
@@ -280,6 +283,7 @@
             padding: 48px 64px;
             max-width: 1440px;
             width: 100%;
+            overflow-x: hidden;
         }
 
         /* Page Header */
@@ -355,7 +359,8 @@
         }
         
         .page-divider {
-            width: calc(100vw - 280px);
+            width: 100%;
+            max-width: calc(100vw - 280px - 64px);
             height: 1px;
             background: #E7E7E7;
             margin-top: 24px;
@@ -460,6 +465,8 @@
             grid-template-columns: 1fr 1fr;
             gap: 24px;
             margin-bottom: 24px;
+            width: 100%;
+            max-width: 100%;
         }
 
         /* Section Card */
@@ -468,6 +475,8 @@
             border-radius: 12px;
             padding: 32px;
             border: 1px solid #E7E7E7;
+            min-width: 0;
+            max-width: 100%;
         }
 
         .section-header {
@@ -527,6 +536,8 @@
             padding-top: 72px;
             padding-bottom: 72px;
             width: 100%;
+            max-width: 100%;
+            overflow: hidden;
         }
         
         .main-charts-grid .section-card {
@@ -534,6 +545,8 @@
             padding: 16px;
             display: flex;
             flex-direction: column;
+            min-width: 0;
+            overflow: hidden;
         }
         
         .main-charts-grid .section-header {
